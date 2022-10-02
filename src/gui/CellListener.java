@@ -14,6 +14,8 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
 
 public class CellListener extends Thread implements ActionListener {
     private final int posX;
@@ -21,12 +23,25 @@ public class CellListener extends Thread implements ActionListener {
     private final JFrame frame;
     private static boolean chooseFrom;
     private static Pair<Integer, Integer> fromWhere;
+    private final Player player;
+    private final Computer computer;
+    private final Lock lock;
+    private final Condition playerCondition;
+    private final Condition computerCondition;
+    private final Condition myCondition;
 
-    public CellListener(int index, JFrame frame) {
+    public CellListener(int index, JFrame frame, Player player, Computer computer, Lock lock,
+                        Condition playerCondition, Condition computerCondition) {
         super();
         posX = index % 8 + 1;
         posY = 8 - index / 8;
         this.frame = frame;
+        this.player = player;
+        this.computer = computer;
+        this.lock = lock;
+        this.playerCondition = playerCondition;
+        this.computerCondition = computerCondition;
+        myCondition = lock.newCondition();
     }
 
     @Override
@@ -42,6 +57,9 @@ public class CellListener extends Thread implements ActionListener {
     public void handleNotChosenFrom() {
         Board board = Board.getBoard();
         ChessPiece chessPiece = board.getChess(posX, posY);
+        if (computer.getState() == State.RUNNABLE) {
+            return;
+        }
         if (chessPiece == null) {
             MyDialog dialog = new MyDialog("该处不存在棋子！", 2, frame);
             Thread thread = new Thread(dialog);
@@ -83,16 +101,28 @@ public class CellListener extends Thread implements ActionListener {
         }
         else if (MainPanel.getChess().get(getIndex(posX, posY)).getBorder() != null) {
             ChessPiece piece = board.getChess(fromWhere.getKey(), fromWhere.getValue());
-            PieceEvent whiteEvent = board.acMove(piece, new Point(posX, posY));
-            Render render = new Render();
-            render.start();
-            handleWhiteEvent(whiteEvent, piece);
+            player.setMove(piece, new Point(posX, posY));
+            player.setToWakeUp(myCondition);
+
+            lock.lock();
+            board.setCurMoveWhite(true);
+            playerCondition.signal();
+            try {
+                myCondition.await();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            lock.unlock();
+
             for (ChessCell chessCell : MainPanel.getChess()) {
                 chessCell.setBorder(null);
             }
-            Pair<ChessPiece, Point> blackMove = Strategy.decide(4);
-            board.acMove(blackMove.getKey(), blackMove.getValue());
-            MainPanel.render();
+            lock.lock();
+            if (player.isNeedComputer()) {
+                board.setCurMoveWhite(false);
+                computerCondition.signal();
+            }
+            lock.unlock();
             chooseFrom = false;
         }
         else if (board.getChess(posX, posY) != null &&
@@ -106,11 +136,7 @@ public class CellListener extends Thread implements ActionListener {
         }
     }
 
-    public void handleWhiteEvent(PieceEvent event, ChessPiece piece) {
-        if (event == PieceEvent.PAWN_PROMOTION) {
-            new MyDialog("请选择兵升变目标", frame, piece);
-        }
-    }
+
 
     public int getIndex(Point point) {
         return 8 * (8 - point.getPy()) + point.getPx() - 1;

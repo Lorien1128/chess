@@ -8,14 +8,25 @@ import javax.swing.JPanel;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.util.ArrayList;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class MainPanel extends JPanel {
     private static final ArrayList<ChessCell> chess = new ArrayList<>();
 
     public MainPanel(JFrame frame) {
         setLayout(new GridLayout(9, 9, 0, 0));
+        Lock lock = new ReentrantLock();
+        Condition playerCondition = lock.newCondition();
+        Condition computerCondition = lock.newCondition();
+        Player player = new Player(frame, lock, playerCondition, computerCondition);
+        player.start();
+        Computer computer = new Computer(lock, computerCondition);
+        computer.start();
         for (int i = 0; i < 64; i++) {
-            ChessCell chessCell = new ChessCell(i, frame);
+            ChessCell chessCell = new ChessCell(i, frame, player, computer, lock,
+                    playerCondition, computerCondition);
             chessCell.setBorder(null);
             add(chessCell);
             chess.add(chessCell);

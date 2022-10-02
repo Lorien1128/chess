@@ -48,12 +48,12 @@ public class King extends ChessPiece {
                 getPoint().setPoint(pre);
                 getBoard().addToList(this);
             }
-        }
-        if (getBoard().beAbleToCastling(isWhite(), true)) {
-            result.add(new Point(3, y));
-        }
-        if (getBoard().beAbleToCastling(isWhite(), false)) {
-            result.add(new Point(7, y));
+            if (getBoard().beAbleToCastling(isWhite(), true)) {
+                result.add(new Point(3, y));
+            }
+            if (getBoard().beAbleToCastling(isWhite(), false)) {
+                result.add(new Point(7, y));
+            }
         }
         return result;
     }

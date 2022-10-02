@@ -12,6 +12,8 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
 
 public class MyDialog extends JDialog implements Runnable {
     private final JLabel note;
@@ -34,10 +36,10 @@ public class MyDialog extends JDialog implements Runnable {
         note.setFont(new Font("微软雅黑", Font.PLAIN, 14));
         container.add(note);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        setVisible(true);
     }
 
-    public MyDialog(String text, JFrame frame, ChessPiece chessPiece) {
+    public MyDialog(String text, JFrame frame, ChessPiece chessPiece,
+                    Lock lock, Condition toWakeUp) {
         super(frame);
         note = new JLabel();
         time = 0;
@@ -59,11 +61,13 @@ public class MyDialog extends JDialog implements Runnable {
             buttons[i] = new JButton();
             buttons[i].setBounds(20 + 80 * i, 70, 60, 40);
             buttons[i].setText(texts[i]);
-            buttons[i].addActionListener(new PromotionListener(i + 1, this, chessPiece));
+            buttons[i].addActionListener(new PromotionListener(i + 1, this, chessPiece,
+                    lock, toWakeUp));
             container.add(buttons[i]);
         }
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setVisible(true);
+        //System.out.println("完成构建");
     }
 
     @Override

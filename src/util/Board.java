@@ -18,8 +18,21 @@ public class Board {
     private static final Board BOARD = new Board();
     private ArrayList<ChessPiece> chessPieces = new ArrayList<>();
     private JFrame frame;
+    private boolean curMoveWhite;
 
     private Board() {
+    }
+
+    public void setCurMoveWhite(boolean curMoveWhite) {
+        synchronized (this) {
+            this.curMoveWhite = curMoveWhite;
+        }
+    }
+
+    public boolean isCurMoveWhite() {
+        synchronized (this) {
+            return curMoveWhite;
+        }
     }
 
     public void setFrame(JFrame frame) {
@@ -136,7 +149,7 @@ public class Board {
         assert king != null;
         Point kingLoc = king.getPoint();
         for (ChessPiece chessPiece : chessPieces) {
-            if (!(chessPiece instanceof King) && chessPiece != null &&
+            if (chessPiece != null &&
                     (chessPiece.isWhite() ^ white) &&
                     chessPiece.isAccessible(kingLoc, true)) {
                 return true;
