@@ -136,8 +136,6 @@ public class CellListener extends Thread implements ActionListener {
         }
     }
 
-
-
     public int getIndex(Point point) {
         return 8 * (8 - point.getPy()) + point.getPx() - 1;
     }

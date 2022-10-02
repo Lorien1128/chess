@@ -19,6 +19,7 @@ public class Board {
     private ArrayList<ChessPiece> chessPieces = new ArrayList<>();
     private JFrame frame;
     private boolean curMoveWhite;
+    private final ArrayList<ArrayList<ChessPiece>> history = new ArrayList<>();
 
     private Board() {
     }
@@ -45,6 +46,7 @@ public class Board {
         }
         init(true);
         init(false);
+        history.add(Tools.copy(chessPieces));
     }
 
     private void init(boolean white) {
@@ -344,6 +346,9 @@ public class Board {
         else if (attacked) {
             return PieceEvent.IN_CHECK;
         }
+        if (!chessPiece.isWhite()) {
+            history.add(Tools.copy(chessPieces));
+        }
         return PieceEvent.NO_EVENT;
     }
 
@@ -417,5 +422,46 @@ public class Board {
         chessPieces.set(getIndex(destination.getPx(), destination.getPy()), chessPiece);
         chessPieces.set(getIndex(chessPiece.getX(), chessPiece.getY()), null);
         chessPiece.getPoint().setPoint(destination);
+    }
+
+    public ArrayList<Point> undo() {
+        //System.out.println(history.size());
+        if (isCurMoveWhite()) {
+            if (history.size() == 1 && history.get(0).toString().
+                    equals(chessPieces.toString())) {
+                return null;
+            }
+            ArrayList<ChessPiece> picture;
+            try {
+                picture = history.get(history.size() - 1);
+                if (picture.toString().equals(chessPieces.toString()) &&
+                        history.size() >= 2) {
+                    history.remove(history.size() - 1);
+                    picture = history.get(history.size() - 1);
+                }
+                if (history.isEmpty()) {
+                    history.add(Tools.copy(picture));
+                }
+            } catch (IndexOutOfBoundsException e) {
+                return null;
+            }
+            ArrayList<Point> changes = new ArrayList<>();
+            for (int i = 0; i < 64; i++) {
+                if (picture.get(i) == null && chessPieces.get(i) != null) {
+                    changes.add(chessPieces.get(i).getPoint());
+                }
+                else if (picture.get(i) != null && chessPieces.get(i) == null) {
+                    changes.add(picture.get(i).getPoint());
+                }
+                else if (picture.get(i) != null && chessPieces.get(i) != null &&
+                        !picture.get(i).toString().equals(
+                        chessPieces.get(i).toString())) {
+                    changes.add(chessPieces.get(i).getPoint());
+                }
+            }
+            chessPieces = Tools.copy(picture);
+            return changes;
+        }
+        return null;
     }
 }

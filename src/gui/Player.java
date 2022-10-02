@@ -65,6 +65,17 @@ public class Player extends Thread {
             setNeedComputer(false);
             new MyDialog("请选择兵升变目标", frame, piece, lock, computerCondition);
         }
+        else if (event == PieceEvent.IN_CHECK) {
+            MyDialog dialog = new MyDialog("对方被将军！", 2, frame);
+            Thread thread = new Thread(dialog);
+            thread.start();
+        }
+        else if (event == PieceEvent.CHECKMATED) {
+            new MyDialog("对方被将死！",frame, true);
+        }
+        else if (event == PieceEvent.DRAW) {
+            new MyDialog("对方被逼和！",frame, true);
+        }
     }
 
     public void setMove(ChessPiece chessPiece, Point point) {

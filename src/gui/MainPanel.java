@@ -2,9 +2,12 @@ package gui;
 
 import piece.ChessPiece;
 import util.Board;
+import util.Point;
 
+import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.util.ArrayList;
@@ -22,7 +25,7 @@ public class MainPanel extends JPanel {
         Condition computerCondition = lock.newCondition();
         Player player = new Player(frame, lock, playerCondition, computerCondition);
         player.start();
-        Computer computer = new Computer(lock, computerCondition);
+        Computer computer = new Computer(frame, lock, computerCondition);
         computer.start();
         for (int i = 0; i < 64; i++) {
             ChessCell chessCell = new ChessCell(i, frame, player, computer, lock,
@@ -54,6 +57,20 @@ public class MainPanel extends JPanel {
             else {
                 chessCell.setText(null);
             }
+        }
+    }
+
+    public int getIndex(Point point) {
+        return 8 * (8 - point.getPy()) + point.getPx() - 1;
+    }
+
+    public void showUndo(ArrayList<Point> changes) {
+        for (ChessCell chessCell : chess) {
+            chessCell.setBorder(null);
+        }
+        for (Point point : changes) {
+            int index = getIndex(point);
+            chess.get(index).setBorder(BorderFactory.createLineBorder(Color.ORANGE, 3));
         }
     }
 }

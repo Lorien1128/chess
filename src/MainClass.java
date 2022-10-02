@@ -1,4 +1,4 @@
-import gui.MyGUI;
+import gui.MyGui;
 import javafx.util.Pair;
 import piece.ChessPiece;
 import util.Board;
@@ -8,11 +8,12 @@ import util.Strategy;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+//TODO: 撤销，难度选择，重开接口
 public class MainClass {
     public static void main(String[] args) {
         Board board = Board.getBoard();
         board.init();
-        MyGUI gui = new MyGUI();
+        MyGui gui = new MyGui();
         board.setFrame(gui);
     }
 

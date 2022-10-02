@@ -27,8 +27,11 @@ public class Strategy {
         }
         else if (piles % 2 == 1) {
             ArrayList<Pair<ChessPiece, Point>> choices = board.getAllChoices(true);
-            if (choices.isEmpty()) {
+            if (choices.isEmpty() && board.kingIsAttacked(true)) {
                 return Integer.MAX_VALUE;
+            }
+            else if (choices.isEmpty()) {
+                return 0;
             }
             int min = Integer.MAX_VALUE;
             ArrayList<ChessPiece> snapshot = Tools.copy(board.getChessPieces());
@@ -48,8 +51,11 @@ public class Strategy {
         }
         else {
             ArrayList<Pair<ChessPiece, Point>> choices = board.getAllChoices(false);
-            if (choices.isEmpty()) {
+            if (choices.isEmpty() && board.kingIsAttacked(false)) {
                 return Integer.MIN_VALUE;
+            }
+            else if (choices.isEmpty()) {
+                return 0;
             }
             ArrayList<ChessPiece> snapshot = Tools.copy(board.getChessPieces());
             board.setChessPieces(Tools.copy(snapshot));

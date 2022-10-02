@@ -70,6 +70,34 @@ public class MyDialog extends JDialog implements Runnable {
         //System.out.println("完成构建");
     }
 
+    public MyDialog(String text, Component frame, boolean exit) {
+        setVisible(false);
+        this.time = 0;
+        setBounds(200, 200, 200, 120);
+        setResizable(false);
+        setLocationRelativeTo(frame);
+        setTitle("提示");
+        Container container = getContentPane();
+        container.setLayout(new GridLayout(2, 1, 0, 0));
+        //container.setLayout(null);
+        JLabel label = new JLabel(text, JLabel.CENTER);
+        label.setFont(new Font("微软雅黑", Font.BOLD, 20));
+        label.setBackground(Color.RED);
+        label.setBounds(20, 0, 160, 60);
+        container.add(label);
+        note = null;
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        JButton buttons = new JButton();
+        buttons.setBounds(80, 100, 40, 40);
+        buttons.setText("确定");
+        buttons.setFont(new Font("微软雅黑", Font.BOLD, 15));
+        if (exit) {
+            buttons.addActionListener(e -> System.exit(0));
+        }
+        container.add(buttons);
+        setVisible(true);
+    }
+
     @Override
     public void run() {
         setVisible(true);

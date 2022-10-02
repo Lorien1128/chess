@@ -3,21 +3,24 @@ package gui;
 import javafx.util.Pair;
 import piece.ChessPiece;
 import util.Board;
+import util.PieceEvent;
 import util.Point;
 import util.Strategy;
 
 import javax.swing.*;
-import java.awt.*;
+import java.awt.Color;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 
 public class Computer extends Thread {
     private final Lock lock;
     private final Condition condition;
+    private final JFrame frame;
 
-    public Computer(Lock lock, Condition condition) {
+    public Computer(JFrame frame, Lock lock, Condition condition) {
         this.lock = lock;
         this.condition = condition;
+        this.frame = frame;
     }
 
     public Board getBoard() {
@@ -43,10 +46,27 @@ public class Computer extends Thread {
                 cell.setBorder(BorderFactory.createLineBorder(Color.BLUE, 3));
                 cell = MainPanel.getChess().get(getIndex(target));
                 cell.setBorder(BorderFactory.createLineBorder(Color.BLUE, 3));
-                getBoard().acMove(piece, target);
+                PieceEvent blackEvent = getBoard().acMove(piece, target);
+                handleBlackEvent(blackEvent);
+
                 MainPanel.render();
+                Board.getBoard().setCurMoveWhite(true);
             }
             lock.unlock();
+        }
+    }
+
+    public void handleBlackEvent(PieceEvent event) {
+        if (event == PieceEvent.IN_CHECK) {
+            MyDialog dialog = new MyDialog("你被将军了！", 2, frame);
+            Thread thread = new Thread(dialog);
+            thread.start();
+        }
+        else if (event == PieceEvent.CHECKMATED) {
+            new MyDialog("你被将死了！",frame, true);
+        }
+        else if (event == PieceEvent.DRAW) {
+            new MyDialog("你将对方逼和了！",frame, true);
         }
     }
 
