@@ -1,5 +1,6 @@
 package gui;
 
+import gui.listener.PromotionListener;
 import piece.ChessPiece;
 
 import javax.swing.JButton;

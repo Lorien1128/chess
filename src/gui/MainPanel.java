@@ -17,6 +17,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class MainPanel extends JPanel {
     private static final ArrayList<ChessCell> chess = new ArrayList<>();
+    private final Computer computer;
 
     public MainPanel(JFrame frame) {
         setLayout(new GridLayout(9, 9, 0, 0));
@@ -27,12 +28,27 @@ public class MainPanel extends JPanel {
         player.start();
         Computer computer = new Computer(frame, lock, computerCondition);
         computer.start();
+        this.computer = computer;
         for (int i = 0; i < 64; i++) {
             ChessCell chessCell = new ChessCell(i, frame, player, computer, lock,
                     playerCondition, computerCondition);
             chessCell.setBorder(null);
             add(chessCell);
             chess.add(chessCell);
+        }
+    }
+
+    public Computer getComputer() {
+        return computer;
+    }
+
+    public void reduceCompCount() {
+        computer.countReduce();
+    }
+
+    public void init() {
+        for (ChessCell chessCell : chess) {
+            chessCell.init();
         }
     }
 
@@ -60,7 +76,7 @@ public class MainPanel extends JPanel {
         }
     }
 
-    public int getIndex(Point point) {
+    public static int getIndex(Point point) {
         return 8 * (8 - point.getPy()) + point.getPx() - 1;
     }
 
@@ -72,5 +88,12 @@ public class MainPanel extends JPanel {
             int index = getIndex(point);
             chess.get(index).setBorder(BorderFactory.createLineBorder(Color.ORANGE, 3));
         }
+    }
+
+    public static void showCheck(boolean white) {
+        Board board = Board.getBoard();
+        Point point = board.findKing(white).getPoint();
+        ChessCell cell = chess.get(getIndex(point));
+        cell.setBorder(BorderFactory.createLineBorder(Color.RED, 3));
     }
 }

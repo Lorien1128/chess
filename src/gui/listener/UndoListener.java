@@ -1,5 +1,6 @@
-package gui;
+package gui.listener;
 
+import gui.MainPanel;
 import util.Board;
 import util.Point;
 
@@ -18,8 +19,9 @@ public class UndoListener implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         ArrayList<Point> changes = Board.getBoard().undo();
         if (changes != null) {
-            System.out.println(changes.size());
             panel.showUndo(changes);
+            panel.init();
+            panel.reduceCompCount();
         }
         MainPanel.render();
     }

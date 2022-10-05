@@ -7,17 +7,30 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class Queen extends ChessPiece {
-    public Queen(boolean white) {
-        super(white);
-    }
+    private final int[] valueTable = new int[]{
+        -20,-10,-10, -5, -5,-10,-10,-20,
+        -10,  0,  0,  0,  0,  0,  0,-10,
+        -10,  0,  5,  5,  5,  5,  0,-10,
+        -5,  0,  5,  5,  5,  5,  0, -5,
+        0,  0,  5,  5,  5,  5,  0, -5,
+        -10,  5,  5,  5,  5,  5,  0,-10,
+        -10,  0,  5,  0,  0,  0,  0,-10,
+        -20,-10,-10, -5, -5,-10,-10,-20
+    };
 
     public Queen(int x, int y, boolean white) {
         super(x, y, white);
-        if (white) {
-            setValue(-90);
+        for (int i = 0; i < 64; i++) {
+            valueTable[i] += 800;
+        }
+    }
+
+    public int getValue() {
+        if (isWhite()) {
+            return -valueTable[8 * (8 - getY()) + getX() - 1];
         }
         else {
-            setValue(90);
+            return valueTable[8 * (getY() - 1) + getX() - 1];
         }
     }
 

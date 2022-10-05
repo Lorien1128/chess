@@ -7,14 +7,30 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class Bishop extends ChessPiece {
+    private final int[] valueTable = new int[]{
+        -20,-10,-10,-10,-10,-10,-10,-20,
+        -10,  0,  0,  0,  0,  0,  0,-10,
+        -10,  0,  5, 10, 10,  5,  0,-10,
+        -10,  5,  5, 10, 10,  5,  5,-10,
+        -10,  0, 10, 10, 10, 10,  0,-10,
+        -10, 10, 10, 10, 10, 10, 10,-10,
+        -10,  5,  0,  0,  0,  0,  5,-10,
+        -20,-10,-10,-10,-10,-10,-10,-20,
+    };
 
     public Bishop(int x, int y, boolean white) {
         super(x, y, white);
-        if (white) {
-            setValue(-30);
+        for (int i = 0; i < 64; i++) {
+            valueTable[i] += 300;
+        }
+    }
+
+    public int getValue() {
+        if (isWhite()) {
+            return -valueTable[8 * (8 - getY()) + getX() - 1];
         }
         else {
-            setValue(30);
+            return valueTable[8 * (getY() - 1) + getX() - 1];
         }
     }
 
@@ -46,8 +62,7 @@ public class Bishop extends ChessPiece {
         for (int i = 1; x - i >= 1 && y + i <= 8; i++) {
             if (getBoard().hasChessPiece(x - i, y + i, isWhite())) {
                 break;
-            }
-            else if (getBoard().hasChessPiece(x - i, y + i, !isWhite())) {
+            } else if (getBoard().hasChessPiece(x - i, y + i, !isWhite())) {
                 result.add(new Point(x - i, y + i));
                 break;
             }
@@ -56,8 +71,7 @@ public class Bishop extends ChessPiece {
         for (int i = 1; x + i <= 8 && y - i >= 1; i++) {
             if (getBoard().hasChessPiece(x + i, y - i, isWhite())) {
                 break;
-            }
-            else if (getBoard().hasChessPiece(x + i, y - i, !isWhite())) {
+            } else if (getBoard().hasChessPiece(x + i, y - i, !isWhite())) {
                 result.add(new Point(x + i, y - i));
                 break;
             }

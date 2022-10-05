@@ -9,7 +9,6 @@ import piece.Knight;
 import piece.Pawn;
 import piece.Queen;
 import piece.Rook;
-
 import javax.swing.JFrame;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -19,9 +18,29 @@ public class Board {
     private ArrayList<ChessPiece> chessPieces = new ArrayList<>();
     private JFrame frame;
     private boolean curMoveWhite;
-    private final ArrayList<ArrayList<ChessPiece>> history = new ArrayList<>();
+    private ArrayList<ArrayList<ChessPiece>> history = new ArrayList<>();
 
     private Board() {
+    }
+
+    public void setEndOfGame() {
+        int whSum = 0;
+        int blSum = 0;
+        for (ChessPiece chessPiece : chessPieces) {
+            if (chessPiece != null && chessPiece.isWhite()
+                    && !(chessPiece instanceof Pawn)) {
+                whSum++;
+            } else if (chessPiece != null && !chessPiece.isWhite()
+                    && !(chessPiece instanceof Pawn)) {
+                blSum++;
+            }
+        }
+        if (whSum <= 2) {
+            ((King) findKing(true)).setEndOfGame(true);
+        }
+        if (blSum <= 2) {
+            ((King) findKing(false)).setEndOfGame(true);
+        }
     }
 
     public void setCurMoveWhite(boolean curMoveWhite) {
@@ -41,6 +60,9 @@ public class Board {
     }
 
     public void init() {
+        chessPieces = new ArrayList<>();
+        history = new ArrayList<>();
+        setCurMoveWhite(true);
         for (int i = 0; i <= 63; i++) {
             chessPieces.add(null);
         }
@@ -112,7 +134,7 @@ public class Board {
         return chessPiece != null && chessPiece.isWhite() == white;
     }
 
-    private ChessPiece findKing(boolean white) {
+    public ChessPiece findKing(boolean white) {
         for (ChessPiece chessPiece : chessPieces) {
             if (chessPiece instanceof King
                     && chessPiece.isWhite() == white) {
@@ -270,7 +292,15 @@ public class Board {
         int sum = 0;
         for (ChessPiece chessPiece : chessPieces) {
             if (chessPiece != null) {
-                sum += chessPiece.getValue();
+                int value = chessPiece.getValue();
+                sum += value;
+                if (value == 0) {
+                    try {
+                        throw new Exception("VALUE ERROR");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         }
         return sum;
@@ -349,6 +379,7 @@ public class Board {
         if (!chessPiece.isWhite()) {
             history.add(Tools.copy(chessPieces));
         }
+        setEndOfGame();
         return PieceEvent.NO_EVENT;
     }
 

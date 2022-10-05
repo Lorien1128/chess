@@ -7,13 +7,30 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class Knight extends ChessPiece {
+    private final int[] valueTable = new int[]{
+        -50,-40,-30,-30,-30,-30,-40,-50,
+        -40,-20,  0,  0,  0,  0,-20,-40,
+        -30,  0, 10, 15, 15, 10,  0,-30,
+        -30,  5, 15, 20, 20, 15,  5,-30,
+        -30,  0, 15, 20, 20, 15,  0,-30,
+        -30,  5, 10, 15, 15, 10,  5,-30,
+        -40,-20,  0,  5,  5,  0,-20,-40,
+        -50,-40,-30,-30,-30,-30,-40,-50,
+    };
+
     public Knight(int x, int y, boolean white) {
         super(x, y, white);
-        if (white) {
-            setValue(-30);
+        for (int i = 0; i < 64; i++) {
+            valueTable[i] += 300;
+        }
+    }
+
+    public int getValue() {
+        if (isWhite()) {
+            return -valueTable[8 * (8 - getY()) + getX() - 1];
         }
         else {
-            setValue(30);
+            return valueTable[8 * (getY() - 1) + getX() - 1];
         }
     }
 

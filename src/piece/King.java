@@ -4,17 +4,61 @@ import util.Point;
 import util.Tools;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 
 public class King extends ChessPiece {
-    public King(int x, int y, boolean white) {
-        super(x, y, white);
-        if (white) {
-            setValue(-900);
+    private boolean endOfGame = false;
+    private final List<Integer> middleValueTable = Arrays.asList(
+        -30,-40,-40,-50,-50,-40,-40,-30,
+        -30,-40,-40,-50,-50,-40,-40,-30,
+        -30,-40,-40,-50,-50,-40,-40,-30,
+        -30,-40,-40,-50,-50,-40,-40,-30,
+        -20,-30,-30,-40,-40,-30,-30,-20,
+        -10,-20,-20,-20,-20,-20,-20,-10,
+        20, 20,  0,  0,  0,  0, 20, 20,
+        20, 30, 10,  0,  0, 10, 30, 20
+    );
+    private final List<Integer> endValueTable = Arrays.asList(
+        -50,-40,-30,-20,-20,-30,-40,-50,
+        -30,-20,-10,  0,  0,-10,-20,-30,
+        -30,-10, 20, 30, 30, 20,-10,-30,
+        -30,-10, 30, 40, 40, 30,-10,-30,
+        -30,-10, 30, 40, 40, 30,-10,-30,
+        -30,-10, 20, 30, 30, 20,-10,-30,
+        -30,-30,  0,  0,  0,  0,-30,-30,
+        -50,-30,-30,-30,-30,-30,-30,-50
+    );
+
+    public int getValue() {
+        List<Integer> valueTable;
+        if (endOfGame) {
+            valueTable = endValueTable;
         }
         else {
-            setValue(900);
+            valueTable = middleValueTable;
         }
+        if (isWhite()) {
+            return -valueTable.get(8 * (8 - getY()) + getX() - 1);
+        }
+        else {
+            return valueTable.get(8 * (getY() - 1) + getX() - 1);
+        }
+    }
+
+    public King(int x, int y, boolean white) {
+        super(x, y, white);
+        for (int i = 0; i < 64; i++) {
+            middleValueTable.set(i, middleValueTable.get(i) + 2000);
+        }
+        for (int i = 0; i < 64; i++) {
+            endValueTable.set(i, endValueTable.get(i) + 2000);
+        }
+    }
+
+    public void setEndOfGame(boolean endOfGame) {
+        this.endOfGame = endOfGame;
     }
 
     @Override

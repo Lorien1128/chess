@@ -20,17 +20,12 @@ public class ChessPiece implements Cloneable {
         this.white = white;
     }
 
-    public void setValue(int value) {
-        this.value = value;
+    public ChessPiece() {
+        white = true;
     }
 
     public int getValue() {
-        if (value > 0) {
-            return value - (Math.abs(getX() - 4) + Math.abs(getY() - 4));
-        }
-        else {
-            return value + (Math.abs(getX() - 4) + Math.abs(getY() - 4));
-        }
+        return 0;
     }
 
     public ArrayList<Point> searchAllDrop(boolean ignoreAttack) {

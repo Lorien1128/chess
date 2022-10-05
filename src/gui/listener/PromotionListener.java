@@ -1,10 +1,11 @@
-package gui;
+package gui.listener;
 
+import gui.MyDialog;
 import piece.ChessPiece;
 import util.Board;
 import util.Render;
 
-import javax.swing.*;
+import javax.swing.JDialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.concurrent.locks.Condition;

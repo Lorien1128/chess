@@ -7,13 +7,30 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class Rook extends ChessPiece {
+    private final int[] valueTable = new int[]{
+        0,  0,  0,  0,  0,  0,  0,  0,
+        5, 10, 10, 10, 10, 10, 10,  5,
+        -5,  0,  0,  0,  0,  0,  0, -5,
+        -5,  0,  0,  0,  0,  0,  0, -5,
+        -5,  0,  0,  0,  0,  0,  0, -5,
+        -5,  0,  0,  0,  0,  0,  0, -5,
+        -5,  0,  0,  0,  0,  0,  0, -5,
+        0,  0,  0,  5,  5,  0,  0,  0
+    };
+
     public Rook(int x, int y, boolean white) {
         super(x, y, white);
-        if (white) {
-            setValue(-50);
+        for (int i = 0; i < 64; i++) {
+            valueTable[i] += 400;
+        }
+    }
+
+    public int getValue() {
+        if (isWhite()) {
+            return -valueTable[8 * (8 - getY()) + getX() - 1];
         }
         else {
-            setValue(50);
+            return valueTable[8 * (getY() - 1) + getX() - 1];
         }
     }
 
@@ -25,8 +42,7 @@ public class Rook extends ChessPiece {
         for (int i = x - 1; i >= 1; i--) {
             if (getBoard().hasChessPiece(i, y, isWhite())) {
                 break;
-            }
-            else if (getBoard().hasChessPiece(i, y, !isWhite())) {
+            } else if (getBoard().hasChessPiece(i, y, !isWhite())) {
                 result.add(new Point(i, y));
                 break;
             }
@@ -35,8 +51,7 @@ public class Rook extends ChessPiece {
         for (int i = x + 1; i <= 8; i++) {
             if (getBoard().hasChessPiece(i, y, isWhite())) {
                 break;
-            }
-            else if (getBoard().hasChessPiece(i, y, !isWhite())) {
+            } else if (getBoard().hasChessPiece(i, y, !isWhite())) {
                 result.add(new Point(i, y));
                 break;
             }

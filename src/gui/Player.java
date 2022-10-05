@@ -6,7 +6,7 @@ import util.Board;
 import util.PieceEvent;
 import util.Point;
 
-import javax.swing.*;
+import javax.swing.JFrame;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 
@@ -35,6 +35,10 @@ public class Player extends Thread {
 
     public Board getBoard() {
         return Board.getBoard();
+    }
+
+    public void init() {
+        setNeedComputer(true);
     }
 
     @Override
@@ -66,9 +70,7 @@ public class Player extends Thread {
             new MyDialog("请选择兵升变目标", frame, piece, lock, computerCondition);
         }
         else if (event == PieceEvent.IN_CHECK) {
-            MyDialog dialog = new MyDialog("对方被将军！", 2, frame);
-            Thread thread = new Thread(dialog);
-            thread.start();
+            MainPanel.showCheck(false);
         }
         else if (event == PieceEvent.CHECKMATED) {
             new MyDialog("对方被将死！",frame, true);

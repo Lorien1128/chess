@@ -1,12 +1,14 @@
-package gui;
+package gui.listener;
 
+import gui.ChessCell;
+import gui.Computer;
+import gui.MainPanel;
+import gui.MyDialog;
+import gui.Player;
 import javafx.util.Pair;
 import piece.ChessPiece;
 import util.Board;
-import util.PieceEvent;
 import util.Point;
-import util.Render;
-import util.Strategy;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
@@ -42,6 +44,11 @@ public class CellListener extends Thread implements ActionListener {
         this.playerCondition = playerCondition;
         this.computerCondition = computerCondition;
         myCondition = lock.newCondition();
+    }
+
+    public void init() {
+        chooseFrom = false;
+        player.init();
     }
 
     @Override
