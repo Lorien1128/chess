@@ -21,7 +21,7 @@ public class Pawn extends ChessPiece {
     public Pawn(int x, int y, boolean white) {
         super(x, y, white);
         for (int i = 0; i < 64; i++) {
-            valueTable[i] += 150;
+            valueTable[i] += 120;
         }
     }
 
@@ -64,13 +64,18 @@ public class Pawn extends ChessPiece {
                 getBoard().hasChessPiece(x - step, y + step, !isWhite())) {
             result.add(new Point(x - step, y + step));
         }
-        result.removeIf(point -> point.getPx() < 1 || point.getPx() > 8 ||
-                point.getPy() < 1 || point.getPy() > 8);
+        ArrayList<Point> fina = new ArrayList<>();
+        for (Point point : result) {
+            if (point.getPx() >= 1 && point.getPx() <= 8 &&
+                    point.getPy() >= 1 && point.getPy() <= 8) {
+                fina.add(point);
+            }
+        }
         if (!ignoreAttack) {
             ArrayList<ChessPiece> snapshot = Tools.copy(getBoard().getChessPieces());
             getBoard().setChessPieces(Tools.copy(snapshot));
             Point pre = new Point(getPoint());
-            Iterator<Point> iterator = result.iterator();
+            Iterator<Point> iterator = fina.iterator();
             while (iterator.hasNext()) {
                 Point point = iterator.next();
                 getBoard().move(this, point);
@@ -82,7 +87,7 @@ public class Pawn extends ChessPiece {
                 getBoard().addToList(this);
             }
         }
-        return result;
+        return fina;
     }
 
     @Override

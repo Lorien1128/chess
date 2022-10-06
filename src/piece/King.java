@@ -74,14 +74,19 @@ public class King extends ChessPiece {
         result.add(new Point(x - 1, y + 1));
         result.add(new Point(x - 1, y));
         result.add(new Point(x - 1, y - 1));
-        result.removeIf(point -> point.getPx() < 1 || point.getPx() > 8 ||
-                point.getPy() < 1 || point.getPy() > 8 ||
-                getBoard().hasChessPiece(point.getPx(), point.getPy(), isWhite()));
+        ArrayList<Point> fina = new ArrayList<>();
+        for (Point point : result) {
+            if (point.getPx() >= 1 && point.getPx() <= 8 &&
+                    point.getPy() >= 1 && point.getPy() <= 8 &&
+                    !getBoard().hasChessPiece(point.getPx(), point.getPy(), isWhite())) {
+                fina.add(point);
+            }
+        }
         if (!ignoreAttack) {
             ArrayList<ChessPiece> snapshot = Tools.copy(getBoard().getChessPieces());
             getBoard().setChessPieces(Tools.copy(snapshot));
             Point pre = new Point(getPoint());
-            Iterator<Point> iterator = result.iterator();
+            Iterator<Point> iterator = fina.iterator();
             while (iterator.hasNext()) {
                 Point point = iterator.next();
                 getBoard().move(this, point);
@@ -93,13 +98,13 @@ public class King extends ChessPiece {
                 getBoard().addToList(this);
             }
             if (getBoard().beAbleToCastling(isWhite(), true)) {
-                result.add(new Point(3, y));
+                fina.add(new Point(3, y));
             }
             if (getBoard().beAbleToCastling(isWhite(), false)) {
-                result.add(new Point(7, y));
+                fina.add(new Point(7, y));
             }
         }
-        return result;
+        return fina;
     }
 
     @Override

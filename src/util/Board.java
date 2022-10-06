@@ -77,8 +77,7 @@ public class Board {
         if (white) {
             pawnLine = 2;
             otherLine = 1;
-        }
-        else {
+        } else {
             pawnLine = 7;
             otherLine = 8;
         }
@@ -148,8 +147,7 @@ public class Board {
         for (ChessPiece chessPiece : chessPieces) {
             if (chessPiece instanceof Rook
                     && chessPiece.isWhite() == white &&
-                    chessPiece.getX() == 1 &&
-                    !chessPiece.isMoved()) {
+                    chessPiece.getX() == 1 && !chessPiece.isMoved()) {
                 return chessPiece;
             }
         }
@@ -353,6 +351,10 @@ public class Board {
         }
         else if (chessPiece instanceof Pawn &&
                 chessPiece.getY() == 8) {
+            if (!isCurMoveWhite()) {
+                history.add(Tools.copy(chessPieces));
+            }
+            setEndOfGame();
             return PieceEvent.PAWN_PROMOTION;
         }
         boolean enemyIsWhite = !chessPiece.isWhite();
@@ -367,6 +369,10 @@ public class Board {
             attacked = kingIsAttacked(false);
             noway = getAllChoices(false).isEmpty();
         }
+        if (!isCurMoveWhite()) {
+            history.add(Tools.copy(chessPieces));
+        }
+        setEndOfGame();
         if (attacked && noway) {
             return PieceEvent.CHECKMATED;
         }
@@ -376,10 +382,6 @@ public class Board {
         else if (attacked) {
             return PieceEvent.IN_CHECK;
         }
-        if (!chessPiece.isWhite()) {
-            history.add(Tools.copy(chessPieces));
-        }
-        setEndOfGame();
         return PieceEvent.NO_EVENT;
     }
 

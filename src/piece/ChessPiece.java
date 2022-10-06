@@ -9,7 +9,6 @@ public class ChessPiece implements Cloneable {
     private Point point = new Point();
     private final boolean white;
     private boolean moved = false;
-    private int value;
 
     public ChessPiece(boolean white) {
         this.white = white;

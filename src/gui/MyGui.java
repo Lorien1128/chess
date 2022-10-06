@@ -31,8 +31,7 @@ public class MyGui extends JFrame {
         bar.add(restart);
 
         this.setJMenuBar(bar);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);// 用户点击窗口关闭
-        //this.setJMenuBar(jr);
-        this.setVisible(true);//设置是否窗口显示
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setVisible(true);
     }
 }

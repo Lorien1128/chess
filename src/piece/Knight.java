@@ -47,14 +47,19 @@ public class Knight extends ChessPiece {
         result.add(new Point(x - 2, y - 1));
         result.add(new Point(x + 2, y + 1));
         result.add(new Point(x + 2, y - 1));
-        result.removeIf(point -> point.getPx() < 1 || point.getPx() > 8 ||
-                point.getPy() < 1 || point.getPy() > 8 ||
-                getBoard().hasChessPiece(point.getPx(), point.getPy(), isWhite()));
+        ArrayList<Point> fina = new ArrayList<>();
+        for (Point point : result) {
+            if (point.getPx() >= 1 && point.getPx() <= 8 &&
+                    point.getPy() >= 1 && point.getPy() <= 8 &&
+                    !getBoard().hasChessPiece(point.getPx(), point.getPy(), isWhite())) {
+                fina.add(point);
+            }
+        }
         if (!ignoreAttack) {
             ArrayList<ChessPiece> snapshot = Tools.copy(getBoard().getChessPieces());
             getBoard().setChessPieces(Tools.copy(snapshot));
             Point pre = new Point(getPoint());
-            Iterator<Point> iterator = result.iterator();
+            Iterator<Point> iterator = fina.iterator();
             while (iterator.hasNext()) {
                 Point point = iterator.next();
                 getBoard().move(this, point);
@@ -66,7 +71,7 @@ public class Knight extends ChessPiece {
                 getBoard().addToList(this);
             }
         }
-        return result;
+        return fina;
     }
 
     @Override
