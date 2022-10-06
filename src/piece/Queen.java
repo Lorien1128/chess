@@ -21,7 +21,12 @@ public class Queen extends ChessPiece {
     public Queen(int x, int y, boolean white) {
         super(x, y, white);
         for (int i = 0; i < 64; i++) {
-            valueTable[i] += 800;
+            if (isWhite()) {
+                valueTable[i] += 900;
+            }
+            else {
+                valueTable[i] += 902;
+            }
         }
     }
 

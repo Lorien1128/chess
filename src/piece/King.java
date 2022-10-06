@@ -49,11 +49,21 @@ public class King extends ChessPiece {
 
     public King(int x, int y, boolean white) {
         super(x, y, white);
-        for (int i = 0; i < 64; i++) {
-            middleValueTable.set(i, middleValueTable.get(i) + 2000);
+        if (isWhite()) {
+            for (int i = 0; i < 64; i++) {
+                middleValueTable.set(i, middleValueTable.get(i) + 2000);
+            }
+            for (int i = 0; i < 64; i++) {
+                endValueTable.set(i, endValueTable.get(i) + 2000);
+            }
         }
-        for (int i = 0; i < 64; i++) {
-            endValueTable.set(i, endValueTable.get(i) + 2000);
+        else {
+            for (int i = 0; i < 64; i++) {
+                middleValueTable.set(i, middleValueTable.get(i) + 2002);
+            }
+            for (int i = 0; i < 64; i++) {
+                endValueTable.set(i, endValueTable.get(i) + 2002);
+            }
         }
     }
 

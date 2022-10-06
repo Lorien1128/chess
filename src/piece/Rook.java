@@ -21,7 +21,12 @@ public class Rook extends ChessPiece {
     public Rook(int x, int y, boolean white) {
         super(x, y, white);
         for (int i = 0; i < 64; i++) {
-            valueTable[i] += 400;
+            if (isWhite()) {
+                valueTable[i] += 450;
+            }
+            else {
+                valueTable[i] += 452;
+            }
         }
     }
 

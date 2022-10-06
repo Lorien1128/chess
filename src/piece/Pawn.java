@@ -21,7 +21,12 @@ public class Pawn extends ChessPiece {
     public Pawn(int x, int y, boolean white) {
         super(x, y, white);
         for (int i = 0; i < 64; i++) {
-            valueTable[i] += 120;
+            if (isWhite()) {
+                valueTable[i] += 80;
+            }
+            else {
+                valueTable[i] += 82;
+            }
         }
     }
 

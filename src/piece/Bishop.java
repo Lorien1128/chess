@@ -21,7 +21,12 @@ public class Bishop extends ChessPiece {
     public Bishop(int x, int y, boolean white) {
         super(x, y, white);
         for (int i = 0; i < 64; i++) {
-            valueTable[i] += 300;
+            if (isWhite()) {
+                valueTable[i] += 350;
+            }
+            else {
+                valueTable[i] += 352;
+            }
         }
     }
 
