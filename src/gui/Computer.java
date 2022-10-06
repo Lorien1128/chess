@@ -50,7 +50,7 @@ public class Computer extends Thread {
             if (!getBoard().isCurMoveWhite()) {
                 Pair<ChessPiece, Point> blackMove;
                 long startTime = System.currentTimeMillis();
-                if (count % 40 == 0) {
+                if (count % 80 == 0) {
                     blackMove = Strategy.randomDecide();
                 }
                 else if (count % 60 == 0) {
