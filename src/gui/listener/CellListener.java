@@ -64,7 +64,7 @@ public class CellListener extends Thread implements ActionListener {
     public void handleNotChosenFrom() {
         Board board = Board.getBoard();
         ChessPiece chessPiece = board.getChess(posX, posY);
-        if (computer.getState() == State.RUNNABLE) {
+        if (computer.getState() == State.RUNNABLE || !board.isCurMoveWhite()) {
             return;
         }
         if (chessPiece == null) {

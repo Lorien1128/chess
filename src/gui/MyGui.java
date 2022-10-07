@@ -22,7 +22,7 @@ public class MyGui extends JFrame {
         JMenuBar bar = new JMenuBar();
         bar.setBounds(0, 0, 600, 100);
 
-        JMenuItem undo = new JMenuItem("撤销");
+        JMenuItem undo = new JMenuItem("悔棋");
         undo.addActionListener(new UndoListener(mainPanel));
         bar.add(undo);
 
