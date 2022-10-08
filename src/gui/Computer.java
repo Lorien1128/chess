@@ -1,8 +1,10 @@
 package gui;
 
+import connection.MySocket;
 import javafx.util.Pair;
 import piece.ChessPiece;
 import util.Board;
+import util.Mode;
 import util.PieceEvent;
 import util.Point;
 import util.Strategy;
@@ -10,6 +12,7 @@ import util.Strategy;
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import java.awt.Color;
+import java.io.IOException;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 
@@ -18,8 +21,10 @@ public class Computer extends Thread {
     private final Condition condition;
     private final JFrame frame;
     private int count = 0;
+    private static final MySocket socket = new MySocket();
+    private static Mode mode;
 
-    public Computer(JFrame frame, Lock lock, Condition condition) {
+    public Computer(JFrame frame, Lock lock, Condition condition) throws IOException {
         this.lock = lock;
         this.condition = condition;
         this.frame = frame;
@@ -27,6 +32,17 @@ public class Computer extends Thread {
 
     public void init() {
         count = 0;
+    }
+
+    public static void setMode(Mode mode) {
+        Computer.mode = mode;
+        if (mode != Mode.OUTER_AI) {
+            socket.close();
+        }
+    }
+
+    public static Mode getMode() {
+        return mode;
     }
 
     public void countReduce() {
@@ -48,19 +64,28 @@ public class Computer extends Thread {
             }
             //System.out.println("computer is awake");
             if (!getBoard().isCurMoveWhite()) {
-                Pair<ChessPiece, Point> blackMove;
+                Pair<ChessPiece, Point> blackMove = new Pair<>(null, null);
                 long startTime = System.currentTimeMillis();
-                if (count % 80 == 0) {
-                    blackMove = Strategy.randomDecide();
+                if (mode == Mode.INNER_AI) {
+                    if (count % 80 == 0) {
+                        blackMove = Strategy.randomDecide();
+                    }
+                    else if (count % 60 == 0) {
+                        blackMove = Strategy.decide(3);
+                    }
+                    else {
+                        blackMove = Strategy.decide(4);
+                    }
+                    if (getBoard().isCurMoveWhite()) {
+                        blackMove = Strategy.monteCarloDecide(2, 2);
+                    }
                 }
-                else if (count % 60 == 0) {
-                    blackMove = Strategy.decide(3);
-                }
-                else {
-                    blackMove = Strategy.decide(4);
-                }
-                if (getBoard().isCurMoveWhite()) {
-                    blackMove = Strategy.monteCarloDecide(2, 2);
+                else if (mode == Mode.OUTER_AI) {
+                    try {
+                        blackMove = socket.queryStep(getBoard().getLastMove());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
                 long endTime = System.currentTimeMillis();
                 if (endTime - startTime < 2000) {

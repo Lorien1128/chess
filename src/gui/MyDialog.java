@@ -1,5 +1,6 @@
 package gui;
 
+import gui.listener.ModeListener;
 import gui.listener.PromotionListener;
 import piece.ChessPiece;
 
@@ -96,6 +97,39 @@ public class MyDialog extends JDialog implements Runnable {
             buttons.addActionListener(e -> System.exit(0));
         }
         container.add(buttons);
+        setVisible(true);
+    }
+
+    public MyDialog(String text, JFrame frame) {
+        super(frame, true);
+        note = new JLabel();
+        time = 0;
+        setResizable(false);
+        setVisible(false);
+        setBounds(200, 200, 360, 200);
+        setLocationRelativeTo(frame);
+        setTitle("提示");
+        Container container = getContentPane();
+        container.setLayout(null);
+        JLabel label = new JLabel(text, JLabel.CENTER);
+        label.setFont(new Font("微软雅黑", Font.BOLD, 20));
+        label.setBounds(0, 10, 340, 50);
+        container.add(label);
+        String[] texts = {"内置AI", "外部AI"};
+        JButton[] buttons = new JButton[4];
+        for (int i = 0; i < 2; i++) {
+            buttons[i] = new JButton();
+            buttons[i].setBounds(52 + 150 * i, 70, 90, 40);
+            buttons[i].setText(texts[i]);
+            buttons[i].addActionListener(new ModeListener(i, this));
+            container.add(buttons[i]);
+        }
+        JLabel label1 = new JLabel("外部AI模式需要电脑安装Python解释器", JLabel.CENTER);
+        label1.setFont(new Font("微软雅黑", Font.PLAIN, 13));
+        label1.setForeground(Color.RED);
+        label1.setBounds(0, 120, 340, 20);
+        container.add(label1);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setVisible(true);
     }
 

@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
@@ -26,7 +27,13 @@ public class MainPanel extends JPanel {
         Condition computerCondition = lock.newCondition();
         Player player = new Player(frame, lock, playerCondition, computerCondition);
         player.start();
-        Computer computer = new Computer(frame, lock, computerCondition);
+        Computer computer = null;
+        try {
+            computer = new Computer(frame, lock, computerCondition);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        assert computer != null;
         computer.start();
         this.computer = computer;
         for (int i = 0; i < 64; i++) {

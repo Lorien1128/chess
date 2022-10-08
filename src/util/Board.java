@@ -19,8 +19,13 @@ public class Board {
     private JFrame frame;
     private boolean curMoveWhite;
     private ArrayList<ArrayList<ChessPiece>> history = new ArrayList<>();
+    private Pair<ChessPiece, Point> lastMove;
 
     private Board() {
+    }
+
+    public Pair<ChessPiece, Point> getLastMove() {
+        return lastMove;
     }
 
     public void setEndOfGame() {
@@ -324,6 +329,7 @@ public class Board {
     }
 
     public PieceEvent acMove(ChessPiece preChessPiece, Point destination) {
+        lastMove = new Pair<>(preChessPiece.clone(), destination.clone());
         ChessPiece cp = getChess(destination.getPx(), destination.getPy());
         ChessPiece chessPiece = getChess(preChessPiece.getX(), preChessPiece.getY());
         // 吃子

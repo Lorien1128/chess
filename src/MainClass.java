@@ -1,9 +1,10 @@
 import gui.MyGui;
 import util.Board;
 
-//TODO: 难度选择
+import java.io.IOException;
+
 public class MainClass {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         Board board = Board.getBoard();
         board.init();
         MyGui gui = new MyGui();
