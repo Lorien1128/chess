@@ -408,13 +408,13 @@ public class Board {
         boolean white = chessPiece.isWhite();
         switch (num) {
             case 1:
-                addToList(new Rook(x, y, white));
-                break;
-            case 2:
                 addToList(new Knight(x, y, white));
                 break;
-            case 3:
+            case 2:
                 addToList(new Bishop(x, y, white));
+                break;
+            case 3:
+                addToList(new Rook(x, y, white));
                 break;
             default:
                 addToList(new Queen(x, y, white));
