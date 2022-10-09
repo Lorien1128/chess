@@ -23,6 +23,6 @@ public class UndoListener implements ActionListener {
             panel.init();
             panel.reduceCompCount();
         }
-        MainPanel.render();
+        panel.render();
     }
 }

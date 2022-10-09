@@ -4,7 +4,6 @@ import gui.listener.CellListener;
 import util.Board;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import java.awt.Color;
 import java.awt.Font;
 import java.util.concurrent.locks.Condition;
@@ -15,7 +14,7 @@ public class ChessCell extends JButton {
     private final int posY;
     private final CellListener listener;
 
-    public ChessCell(int index, JFrame frame, Player player, Computer computer, Lock lock,
+    public ChessCell(int index, MyGui frame, Player player, Computer computer, Lock lock,
                      Condition playerCondition, Condition computerCondition) {
         posX = index % 8 + 1;
         posY = 8 - index / 8;

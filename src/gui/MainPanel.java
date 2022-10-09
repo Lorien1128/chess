@@ -1,11 +1,12 @@
 package gui;
 
+import javafx.util.Pair;
 import piece.ChessPiece;
 import util.Board;
+import util.Mode;
 import util.Point;
 
 import javax.swing.BorderFactory;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -17,10 +18,12 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class MainPanel extends JPanel {
-    private static final ArrayList<ChessCell> chess = new ArrayList<>();
+    private final ArrayList<ChessCell> chess = new ArrayList<>();
     private final Computer computer;
+    private final MyGui frame;
 
-    public MainPanel(JFrame frame) {
+    public MainPanel(MyGui frame) {
+        this.frame = frame;
         setLayout(new GridLayout(9, 9, 0, 0));
         Lock lock = new ReentrantLock();
         Condition playerCondition = lock.newCondition();
@@ -40,8 +43,17 @@ public class MainPanel extends JPanel {
             ChessCell chessCell = new ChessCell(i, frame, player, computer, lock,
                     playerCondition, computerCondition);
             chessCell.setBorder(null);
-            add(chessCell);
             chess.add(chessCell);
+        }
+        if (Computer.getMode() != Mode.BOTH_PLAYER || frame.isWhite()) {
+            for (ChessCell cell : chess) {
+                add(cell);
+            }
+        }
+        else {
+            for (int i = chess.size() - 1; i >= 0; i--) {
+                add(chess.get(i));
+            }
         }
     }
 
@@ -59,7 +71,7 @@ public class MainPanel extends JPanel {
         }
     }
 
-    public static ArrayList<ChessCell> getChess() {
+    public ArrayList<ChessCell> getChess() {
         return chess;
     }
 
@@ -68,7 +80,7 @@ public class MainPanel extends JPanel {
         return new Dimension(800, 800);
     }
 
-    public static void render() {
+    public void render() {
         for (ChessCell chessCell : chess) {
             int x = chessCell.getPosX();
             int y = chessCell.getPosY();
@@ -81,6 +93,20 @@ public class MainPanel extends JPanel {
                 chessCell.setText(null);
             }
         }
+        if (Computer.getMode() == Mode.BOTH_PLAYER) {
+            for (ChessCell chessCell : frame.getOtherPlayer().getPanel().getChess()) {
+                int x = chessCell.getPosX();
+                int y = chessCell.getPosY();
+                Board board = Board.getBoard();
+                ChessPiece chessPiece = board.getChess(x, y);
+                if (chessPiece != null) {
+                    chessCell.setText(chessPiece.toString());
+                }
+                else {
+                    chessCell.setText(null);
+                }
+            }
+        }
     }
 
     public static int getIndex(Point point) {
@@ -91,16 +117,40 @@ public class MainPanel extends JPanel {
         for (ChessCell chessCell : chess) {
             chessCell.setBorder(null);
         }
+        if (Computer.getMode() == Mode.BOTH_PLAYER) {
+            for (ChessCell chessCell : frame.getOtherPlayer().getPanel().getChess()) {
+                chessCell.setBorder(null);
+            }
+        }
         for (Point point : changes) {
             int index = getIndex(point);
             chess.get(index).setBorder(BorderFactory.createLineBorder(Color.ORANGE, 3));
+            if (Computer.getMode() == Mode.BOTH_PLAYER) {
+                frame.getOtherPlayer().getPanel().getChess().
+                        get(index).setBorder(BorderFactory.createLineBorder(Color.ORANGE, 3));
+            }
         }
     }
 
-    public static void showCheck(boolean white) {
+    public void showCheck(boolean white) {
         Board board = Board.getBoard();
         Point point = board.findKing(white).getPoint();
         ChessCell cell = chess.get(getIndex(point));
         cell.setBorder(BorderFactory.createLineBorder(Color.RED, 3));
+        if (Computer.getMode() == Mode.BOTH_PLAYER) {
+            cell = frame.getOtherPlayer().getPanel().getChess().get(getIndex(point));
+            cell.setBorder(BorderFactory.createLineBorder(Color.RED, 3));
+        }
+    }
+
+    public void showStepToOther(Pair<ChessPiece, Point> move) {
+        ChessPiece piece = move.getKey();
+        Point target = move.getValue();
+        ChessCell cell = frame.getOtherPlayer().
+                getPanel().getChess().get(getIndex(piece.getPoint()));
+        cell.setBorder(BorderFactory.createLineBorder(Color.BLUE, 3));
+        cell = frame.getOtherPlayer().
+                getPanel().getChess().get(getIndex(target));
+        cell.setBorder(BorderFactory.createLineBorder(Color.BLUE, 3));
     }
 }

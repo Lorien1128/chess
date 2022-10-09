@@ -20,7 +20,7 @@ public class RestartListener implements ActionListener {
             board.init();
             panel.init();
             panel.getComputer().init();
-            MainPanel.render();
+            panel.render();
         }
     }
 }

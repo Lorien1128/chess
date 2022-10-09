@@ -2,16 +2,16 @@ package gui.listener;
 
 import gui.ChessCell;
 import gui.Computer;
-import gui.MainPanel;
 import gui.MyDialog;
+import gui.MyGui;
 import gui.Player;
 import javafx.util.Pair;
 import piece.ChessPiece;
 import util.Board;
+import util.Mode;
 import util.Point;
 
 import javax.swing.BorderFactory;
-import javax.swing.JFrame;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,9 +22,7 @@ import java.util.concurrent.locks.Lock;
 public class CellListener extends Thread implements ActionListener {
     private final int posX;
     private final int posY;
-    private final JFrame frame;
-    private static boolean chooseFrom;
-    private static Pair<Integer, Integer> fromWhere;
+    private final MyGui frame;
     private final Player player;
     private final Computer computer;
     private final Lock lock;
@@ -32,7 +30,7 @@ public class CellListener extends Thread implements ActionListener {
     private final Condition computerCondition;
     private final Condition myCondition;
 
-    public CellListener(int index, JFrame frame, Player player, Computer computer, Lock lock,
+    public CellListener(int index, MyGui frame, Player player, Computer computer, Lock lock,
                         Condition playerCondition, Condition computerCondition) {
         super();
         posX = index % 8 + 1;
@@ -47,13 +45,13 @@ public class CellListener extends Thread implements ActionListener {
     }
 
     public void init() {
-        chooseFrom = false;
+        frame.setChooseFrom(false);
         player.init();
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (!chooseFrom) {
+        if (!frame.isChooseFrom()) {
             handleNotChosenFrom();
         }
         else {
@@ -64,7 +62,8 @@ public class CellListener extends Thread implements ActionListener {
     public void handleNotChosenFrom() {
         Board board = Board.getBoard();
         ChessPiece chessPiece = board.getChess(posX, posY);
-        if (computer.getState() == State.RUNNABLE || !board.isCurMoveWhite()) {
+        if (computer.getState() == State.RUNNABLE ||
+                board.isCurMoveWhite() != frame.isWhite()) {
             return;
         }
         if (chessPiece == null) {
@@ -72,7 +71,7 @@ public class CellListener extends Thread implements ActionListener {
             Thread thread = new Thread(dialog);
             thread.start();
         }
-        else if (!chessPiece.isWhite()) {
+        else if (chessPiece.isWhite() != frame.isWhite()) {
             MyDialog dialog = new MyDialog("请走本方棋子！", 2, frame);
             Thread thread = new Thread(dialog);
             thread.start();
@@ -85,34 +84,36 @@ public class CellListener extends Thread implements ActionListener {
                 thread.start();
             }
             else {
-                for (ChessCell chessCell : MainPanel.getChess()) {
+                for (ChessCell chessCell : frame.getPanel().getChess()) {
                     chessCell.setBorder(null);
                 }
                 for (Point point : points) {
-                    ChessCell cell = MainPanel.getChess().get(getIndex(point));
+                    ChessCell cell = frame.getPanel().getChess().get(getIndex(point));
                     cell.setBorder(BorderFactory.createLineBorder(Color.GREEN, 3));
                 }
-                chooseFrom = true;
-                fromWhere = new Pair<>(posX, posY);
+                frame.setChooseFrom(true);
+                frame.setFromWhere(new Pair<>(posX, posY));
             }
         }
     }
 
     public void handleChosenFrom() {
         Board board = Board.getBoard();
-        if (posX == fromWhere.getKey() && posY == fromWhere.getValue()) {
-            for (ChessCell chessCell : MainPanel.getChess()) {
+        if (posX == frame.getFromWhere().getKey() &&
+                posY == frame.getFromWhere().getValue()) {
+            for (ChessCell chessCell : frame.getPanel().getChess()) {
                 chessCell.setBorder(null);
             }
-            chooseFrom = false;
+            frame.setChooseFrom(false);
         }
-        else if (MainPanel.getChess().get(getIndex(posX, posY)).getBorder() != null) {
-            ChessPiece piece = board.getChess(fromWhere.getKey(), fromWhere.getValue());
+        else if (frame.getPanel().getChess().get(getIndex(posX, posY)).getBorder() != null) {
+            ChessPiece piece = board.getChess(
+                    frame.getFromWhere().getKey(), frame.getFromWhere().getValue());
             player.setMove(piece, new Point(posX, posY));
             player.setToWakeUp(myCondition);
 
             lock.lock();
-            board.setCurMoveWhite(true);
+            board.setCurMoveWhite(frame.isWhite());
             playerCondition.signal();
             try {
                 myCondition.await();
@@ -121,19 +122,24 @@ public class CellListener extends Thread implements ActionListener {
             }
             lock.unlock();
 
-            for (ChessCell chessCell : MainPanel.getChess()) {
+            for (ChessCell chessCell : frame.getPanel().getChess()) {
                 chessCell.setBorder(null);
             }
-            lock.lock();
-            if (player.isNeedComputer()) {
-                board.setCurMoveWhite(false);
-                computerCondition.signal();
+            if (Computer.getMode() != Mode.BOTH_PLAYER) {
+                lock.lock();
+                if (player.isNeedComputer()) {
+                    board.setCurMoveWhite(!frame.isWhite());
+                    computerCondition.signal();
+                }
+                lock.unlock();
             }
-            lock.unlock();
-            chooseFrom = false;
+            else {
+                board.setCurMoveWhite(!frame.isWhite());
+            }
+            frame.setChooseFrom(false);
         }
         else if (board.getChess(posX, posY) != null &&
-                board.getChess(posX, posY).isWhite()) {
+                board.getChess(posX, posY).isWhite() == frame.isWhite()) {
             handleNotChosenFrom();
         }
         else {

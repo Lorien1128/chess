@@ -6,7 +6,6 @@ import piece.ChessPiece;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.WindowConstants;
 import java.awt.Color;
@@ -20,6 +19,7 @@ import java.util.concurrent.locks.Lock;
 public class MyDialog extends JDialog implements Runnable {
     private final JLabel note;
     private final int time;
+    private boolean white;
 
     public MyDialog(String text, int time, Component frame) {
         setVisible(false);
@@ -40,7 +40,7 @@ public class MyDialog extends JDialog implements Runnable {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
     }
 
-    public MyDialog(String text, JFrame frame, ChessPiece chessPiece,
+    public MyDialog(String text, MyGui frame, ChessPiece chessPiece,
                     Lock lock, Condition toWakeUp) {
         super(frame);
         note = new JLabel();
@@ -59,12 +59,13 @@ public class MyDialog extends JDialog implements Runnable {
         container.add(label);
         String[] texts = {"1.马", "2.象", "3.车", "4.后"};
         JButton[] buttons = new JButton[4];
+        this.white = frame.isWhite();
         for (int i = 0; i < 4; i++) {
             buttons[i] = new JButton();
             buttons[i].setBounds(20 + 80 * i, 70, 60, 40);
             buttons[i].setText(texts[i]);
             buttons[i].addActionListener(new PromotionListener(i + 1, this, chessPiece,
-                    lock, toWakeUp));
+                    lock, toWakeUp, frame.getPanel()));
             container.add(buttons[i]);
         }
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -100,7 +101,7 @@ public class MyDialog extends JDialog implements Runnable {
         setVisible(true);
     }
 
-    public MyDialog(String text, JFrame frame) {
+    public MyDialog(String text, MyGui frame) {
         super(frame, true);
         note = new JLabel();
         time = 0;
@@ -115,11 +116,11 @@ public class MyDialog extends JDialog implements Runnable {
         label.setFont(new Font("微软雅黑", Font.BOLD, 20));
         label.setBounds(0, 10, 340, 50);
         container.add(label);
-        String[] texts = {"内置AI", "外部AI"};
+        String[] texts = {"内置AI", "外部AI", "双人对战"};
         JButton[] buttons = new JButton[4];
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 3; i++) {
             buttons[i] = new JButton();
-            buttons[i].setBounds(52 + 150 * i, 70, 90, 40);
+            buttons[i].setBounds(30 + 100 * i, 70, 90, 40);
             buttons[i].setText(texts[i]);
             buttons[i].addActionListener(new ModeListener(i, this));
             container.add(buttons[i]);
@@ -148,5 +149,9 @@ public class MyDialog extends JDialog implements Runnable {
         }
         setVisible(false);
         dispose();
+    }
+
+    public boolean isWhite() {
+        return white;
     }
 }

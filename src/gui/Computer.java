@@ -10,7 +10,6 @@ import util.Point;
 import util.Strategy;
 
 import javax.swing.BorderFactory;
-import javax.swing.JFrame;
 import java.awt.Color;
 import java.io.IOException;
 import java.util.concurrent.locks.Condition;
@@ -19,12 +18,12 @@ import java.util.concurrent.locks.Lock;
 public class Computer extends Thread {
     private final Lock lock;
     private final Condition condition;
-    private final JFrame frame;
+    private final MyGui frame;
     private int count = 0;
     private static final MySocket socket = new MySocket();
     private static Mode mode;
 
-    public Computer(JFrame frame, Lock lock, Condition condition) throws IOException {
+    public Computer(MyGui frame, Lock lock, Condition condition) throws IOException {
         this.lock = lock;
         this.condition = condition;
         this.frame = frame;
@@ -98,15 +97,15 @@ public class Computer extends Thread {
                 ChessPiece piece = blackMove.getKey();
                 Point target = blackMove.getValue();
 
-                ChessCell cell = MainPanel.getChess().get(getIndex(piece.getPoint()));
+                ChessCell cell = frame.getPanel().getChess().get(getIndex(piece.getPoint()));
                 cell.setBorder(BorderFactory.createLineBorder(Color.BLUE, 3));
-                cell = MainPanel.getChess().get(getIndex(target));
+                cell = frame.getPanel().getChess().get(getIndex(target));
                 cell.setBorder(BorderFactory.createLineBorder(Color.BLUE, 3));
                 PieceEvent blackEvent = getBoard().acMove(piece, target);
                 count++;
                 handleBlackEvent(blackEvent);
 
-                MainPanel.render();
+                frame.getPanel().render();
                 Board.getBoard().setCurMoveWhite(true);
             }
             lock.unlock();
@@ -115,7 +114,7 @@ public class Computer extends Thread {
 
     public void handleBlackEvent(PieceEvent event) {
         if (event == PieceEvent.IN_CHECK) {
-            MainPanel.showCheck(true);
+            frame.getPanel().showCheck(true);
         }
         else if (event == PieceEvent.CHECKMATED) {
             new MyDialog("你被将死了！",frame, true);

@@ -19,7 +19,6 @@ public class ModeListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         Computer.setMode(mode);
-
         dialog.dispose();
     }
 }

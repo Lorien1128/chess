@@ -1,6 +1,8 @@
 package util;
 
+import gui.Computer;
 import gui.MyDialog;
+import gui.MyGui;
 import javafx.util.Pair;
 import piece.Bishop;
 import piece.ChessPiece;
@@ -9,19 +11,22 @@ import piece.Knight;
 import piece.Pawn;
 import piece.Queen;
 import piece.Rook;
-import javax.swing.JFrame;
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class Board {
     private static final Board BOARD = new Board();
     private ArrayList<ChessPiece> chessPieces = new ArrayList<>();
-    private JFrame frame;
+    private MyGui frame;
     private boolean curMoveWhite;
     private ArrayList<ArrayList<ChessPiece>> history = new ArrayList<>();
     private Pair<ChessPiece, Point> lastMove;
 
     private Board() {
+    }
+
+    public boolean isTwoPlayers() {
+        return (Computer.getMode() == Mode.BOTH_PLAYER);
     }
 
     public Pair<ChessPiece, Point> getLastMove() {
@@ -60,7 +65,7 @@ public class Board {
         }
     }
 
-    public void setFrame(JFrame frame) {
+    public void setFrame(MyGui frame) {
         this.frame = frame;
     }
 
@@ -71,12 +76,12 @@ public class Board {
         for (int i = 0; i <= 63; i++) {
             chessPieces.add(null);
         }
-        init(true);
-        init(false);
+        initHalf(true);
+        initHalf(false);
         history.add(Tools.copy(chessPieces));
     }
 
-    private void init(boolean white) {
+    private void initHalf(boolean white) {
         int pawnLine;
         int otherLine;
         if (white) {
@@ -351,9 +356,15 @@ public class Board {
             int y = chessPiece.getY();
             boolean white = chessPiece.isWhite();
             addToList(new Queen(x, y, white));
-            MyDialog dialog = new MyDialog("黑方完成了兵升变！", 2, frame);
-            Thread thread = new Thread(dialog);
-            thread.start();
+            if (!isTwoPlayers()) {
+                MyDialog dialog = new MyDialog("黑方完成了兵升变！", 2, frame);
+                Thread thread = new Thread(dialog);
+                thread.start();
+            }
+            else {
+                setEndOfGame();
+                return PieceEvent.PAWN_PROMOTION;
+            }
         }
         else if (chessPiece instanceof Pawn &&
                 chessPiece.getY() == 8) {
