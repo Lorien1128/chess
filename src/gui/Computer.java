@@ -1,6 +1,9 @@
 package gui;
 
 import connection.AiSocket;
+import connection.PvpClient;
+import connection.PvpServer;
+import connection.PvpSocket;
 import javafx.util.Pair;
 import piece.ChessPiece;
 import util.Board;
@@ -22,6 +25,12 @@ public class Computer extends Thread {
     private int count = 0;
     private final AiSocket aiSocket;
     private static Mode mode;
+    private static String host;
+    private static int port;
+    private final PvpServer server = new PvpServer();
+    private final PvpClient client = new PvpClient();
+    private PvpSocket pvpSocket;
+    private boolean begin = true;
 
     public Computer(MyGui frame, Lock lock, Condition condition) throws IOException {
         this.lock = lock;
@@ -64,18 +73,14 @@ public class Computer extends Thread {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            //System.out.println("computer is awake");
-            if (!getBoard().isCurMoveWhite()) {
+            // System.out.println("computer is awake");
+            if (getBoard().isCurMoveWhite() != frame.isWhite()) {
                 Pair<ChessPiece, Point> blackMove = new Pair<>(null, null);
                 long startTime = System.currentTimeMillis();
                 if (mode == Mode.INNER_AI) {
                     if (count % 80 == 0) {
                         blackMove = Strategy.randomDecide();
-                    }
-                    else if (count % 60 == 0) {
-                        blackMove = Strategy.decide(3);
-                    }
-                    else {
+                    } else {
                         blackMove = Strategy.decide(4);
                     }
                     if (getBoard().isCurMoveWhite()) {
@@ -89,6 +94,14 @@ public class Computer extends Thread {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+                }
+                else if (mode == Mode.PVP_SERVER || mode == Mode.PVP_CLIENT) {
+                    if (!begin || mode == Mode.PVP_SERVER) {
+                        pvpSocket.send(getBoard().getLastMove());
+                    }
+                    blackMove = pvpSocket.receive();
+                    begin = false;
+                    frame.setState(frame.isWhite());
                 }
                 long endTime = System.currentTimeMillis();
                 if (endTime - startTime < 2000) {
@@ -110,7 +123,7 @@ public class Computer extends Thread {
                 handleBlackEvent(blackEvent);
 
                 frame.getPanel().render();
-                Board.getBoard().setCurMoveWhite(true);
+                Board.getBoard().setCurMoveWhite(frame.isWhite());
             }
             lock.unlock();
         }
@@ -118,7 +131,7 @@ public class Computer extends Thread {
 
     public void handleBlackEvent(PieceEvent event) {
         if (event == PieceEvent.IN_CHECK) {
-            frame.getPanel().showCheck(true);
+            frame.getPanel().showCheck(frame.isWhite());
         }
         else if (event == PieceEvent.CHECKMATED) {
             new MyDialog("你被将死了！",frame, true);
@@ -138,5 +151,34 @@ public class Computer extends Thread {
 
     public int getIndex(Point point) {
         return 8 * (8 - point.getPy()) + point.getPx() - 1;
+    }
+
+    public static void setHost(String host) {
+        Computer.host = host;
+    }
+
+    public static void setPort(int port) {
+        Computer.port = port;
+    }
+
+    public void launchSocket() {
+        if (mode == Mode.PVP_SERVER) {
+            server.run(port);
+            pvpSocket = server;
+            MyDialog dialog = new MyDialog("黑方连接成功！", 4, frame);
+            Thread thread = new Thread(dialog);
+            thread.start();
+        }
+        else if (mode == Mode.PVP_CLIENT) {
+            client.run(host, port);
+            pvpSocket = client;
+            wakeUp();
+        }
+    }
+
+    public void wakeUp() {
+        lock.lock();
+        condition.signal();
+        lock.unlock();
     }
 }

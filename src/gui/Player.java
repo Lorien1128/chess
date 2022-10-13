@@ -58,6 +58,9 @@ public class Player extends Thread {
                     frame.setState(!frame.isWhite());
                     frame.getOtherPlayer().setState(!frame.isWhite());
                 }
+                if (getBoard().isTwoPlayers()) {
+                    frame.setState(!frame.isWhite());
+                }
                 PieceEvent whiteEvent = getBoard().acMove(m.getKey(), m.getValue());
                 frame.getPanel().render();
                 handleWhiteEvent(whiteEvent, m.getKey());
@@ -79,13 +82,13 @@ public class Player extends Thread {
         }
         else if (event == PieceEvent.CHECKMATED) {
             new MyDialog("对方被将死！", frame, true);
-            if (getBoard().isTwoPlayers()) {
+            if (Computer.getMode() == Mode.BOTH_PLAYER) {
                 new MyDialog("你被将死了！", frame.getOtherPlayer(), true);
             }
         }
         else if (event == PieceEvent.DRAW) {
             new MyDialog("你被对方逼和了！", frame, true);
-            if (getBoard().isTwoPlayers()) {
+            if (Computer.getMode() == Mode.BOTH_PLAYER) {
                 new MyDialog("你将对方逼和了！", frame.getOtherPlayer(), true);
             }
         }

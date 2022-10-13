@@ -45,7 +45,7 @@ public class MainPanel extends JPanel {
             chessCell.setBorder(null);
             chess.add(chessCell);
         }
-        if (Computer.getMode() != Mode.BOTH_PLAYER || frame.isWhite()) {
+        if (!Board.getBoard().isTwoPlayers() || frame.isWhite()) {
             for (ChessCell cell : chess) {
                 add(cell);
             }

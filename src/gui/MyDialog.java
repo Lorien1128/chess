@@ -2,6 +2,7 @@ package gui;
 
 import gui.listener.ModeListener;
 import gui.listener.PromotionListener;
+import gui.listener.PvpRoleListener;
 import piece.ChessPiece;
 
 import javax.swing.JButton;
@@ -107,28 +108,35 @@ public class MyDialog extends JDialog implements Runnable {
         time = 0;
         setResizable(false);
         setVisible(false);
-        setBounds(200, 200, 360, 200);
+        setBounds(200, 200, 436, 300);
         setLocationRelativeTo(frame);
         setTitle("提示");
         Container container = getContentPane();
         container.setLayout(null);
         JLabel label = new JLabel(text, JLabel.CENTER);
         label.setFont(new Font("微软雅黑", Font.BOLD, 20));
-        label.setBounds(0, 10, 340, 50);
+        label.setBounds(0, 10, 418, 50);
         container.add(label);
-        String[] texts = {"内置AI", "外部AI", "双人对战"};
-        JButton[] buttons = new JButton[4];
+        String[] texts = {"内置AI", "外部AI", "本机双人对战", "联机双人对战（创建房间）", "联机双人对战（加入房间）"};
+        JButton[] buttons = new JButton[5];
         for (int i = 0; i < 3; i++) {
             buttons[i] = new JButton();
-            buttons[i].setBounds(30 + 100 * i, 70, 90, 40);
+            buttons[i].setBounds(20 + 130 * i, 70, 120, 40);
             buttons[i].setText(texts[i]);
             buttons[i].addActionListener(new ModeListener(i, this));
+            container.add(buttons[i]);
+        }
+        for (int i = 3; i < 5; i++) {
+            buttons[i] = new JButton();
+            buttons[i].setBounds(110, 130 + 50 * (i - 3), 200, 40);
+            buttons[i].setText(texts[i]);
+            buttons[i].addActionListener(new PvpRoleListener(i, this));
             container.add(buttons[i]);
         }
         JLabel label1 = new JLabel("外部AI模式需要电脑安装Python解释器", JLabel.CENTER);
         label1.setFont(new Font("微软雅黑", Font.PLAIN, 13));
         label1.setForeground(Color.RED);
-        label1.setBounds(0, 120, 340, 20);
+        label1.setBounds(0, 230, 420, 20);
         container.add(label1);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setVisible(true);

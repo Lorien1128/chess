@@ -26,7 +26,9 @@ public class Board {
     }
 
     public boolean isTwoPlayers() {
-        return (Computer.getMode() == Mode.BOTH_PLAYER);
+        return Computer.getMode() == Mode.BOTH_PLAYER ||
+                Computer.getMode() == Mode.PVP_SERVER ||
+                Computer.getMode() == Mode.PVP_CLIENT;
     }
 
     public Pair<ChessPiece, Point> getLastMove() {
@@ -249,8 +251,8 @@ public class Board {
         ArrayList<String> map = new ArrayList<>();
         for (int i = 0; i <= 7; i++) {
             for (int j = 0; j <= 3; j++) {
-                map.add("\u2F1E");
-                map.add("\u2F1E");
+                map.add("口");
+                map.add("口");
             }
         }
         for (ChessPiece chessPiece : chessPieces) {
@@ -351,11 +353,14 @@ public class Board {
         chessPiece.moveTo(destination);
         // 兵升变
         if (chessPiece instanceof Pawn &&
-                chessPiece.getY() == 1) {
+                (chessPiece.getY() == 8 || chessPiece.getY() == 1)  &&
+                chessPiece.isWhite() != frame.isWhite()) {
             int x = chessPiece.getX();
             int y = chessPiece.getY();
             boolean white = chessPiece.isWhite();
-            addToList(new Queen(x, y, white));
+            if (Computer.getMode() != Mode.BOTH_PLAYER) {
+                addToList(new Queen(x, y, white));
+            }
             if (!isTwoPlayers()) {
                 MyDialog dialog = new MyDialog("黑方完成了兵升变！", 2, frame);
                 Thread thread = new Thread(dialog);
@@ -367,7 +372,8 @@ public class Board {
             }
         }
         else if (chessPiece instanceof Pawn &&
-                chessPiece.getY() == 8) {
+                (chessPiece.getY() == 8 || chessPiece.getY() == 1) &&
+                chessPiece.isWhite() == frame.isWhite()) {
             if (!isCurMoveWhite()) {
                 history.add(Tools.copy(chessPieces));
             }

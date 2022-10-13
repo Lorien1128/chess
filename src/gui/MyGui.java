@@ -27,12 +27,20 @@ public class MyGui extends JFrame {
         }
 
         this.chooseFrom = false;
-        this.white = white;
+        if (Computer.getMode() == Mode.PVP_SERVER) {
+            this.white = true;
+        }
+        else if (Computer.getMode() == Mode.PVP_CLIENT) {
+            this.white = false;
+        }
+        else {
+            this.white = white;
+        }
         this.setLayout(new GridLayout());
         MainPanel mainPanel = new MainPanel(this);
         this.add(mainPanel, BorderLayout.PAGE_END);
         panel = mainPanel;
-        if (white) {
+        if (white && Computer.getMode() != Mode.PVP_CLIENT) {
             this.setBounds(500, 50, 600, 600);
         }
         else {
@@ -45,7 +53,7 @@ public class MyGui extends JFrame {
         bar.setLayout(new GridLayout(1, 7, 1, 1));
         bar.setBounds(0, 0, 600, 100);
 
-        if (Computer.getMode() != Mode.OUTER_AI) {
+        if (Computer.getMode() == Mode.INNER_AI || Computer.getMode() == Mode.BOTH_PLAYER) {
             JMenuItem undo = new JMenuItem("悔棋", JMenuItem.CENTER);
             undo.addActionListener(new UndoListener(mainPanel));
             bar.add(undo);
@@ -55,7 +63,8 @@ public class MyGui extends JFrame {
             bar.add(restart);
         }
 
-        String[] modes = new String[]{"内置AI", "外部AI", "双人对战"};
+        String[] modes = new String[]
+            {"内置AI", "外部AI", "本机双人对战", "联机双人对战（房主）", "联机双人对战（房客）"};
         String text = modes[Computer.getMode().ordinal()];
         JLabel label = new JLabel("模式：" + text, JLabel.CENTER);
         bar.add(label);
@@ -70,6 +79,7 @@ public class MyGui extends JFrame {
         this.setJMenuBar(bar);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setVisible(true);
+        mainPanel.getComputer().launchSocket();
     }
 
     public void setOtherPlayer(MyGui otherPlayer) {
