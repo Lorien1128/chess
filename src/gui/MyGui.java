@@ -22,6 +22,10 @@ public class MyGui extends JFrame {
     private JLabel state;
 
     public MyGui(boolean white) {
+        if (white) {
+            new MyDialog("请选择游戏模式", this);
+        }
+
         this.chooseFrom = false;
         this.white = white;
         this.setLayout(new GridLayout());
@@ -36,10 +40,6 @@ public class MyGui extends JFrame {
         }
         setResizable(true);
         setTitle("国际象棋 by aokmy");
-
-        if (white) {
-            new MyDialog("请选择游戏模式", this);
-        }
 
         JMenuBar bar = new JMenuBar();
         bar.setLayout(new GridLayout(1, 7, 1, 1));

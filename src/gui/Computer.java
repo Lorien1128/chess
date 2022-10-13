@@ -1,6 +1,6 @@
 package gui;
 
-import connection.MySocket;
+import connection.AiSocket;
 import javafx.util.Pair;
 import piece.ChessPiece;
 import util.Board;
@@ -20,13 +20,19 @@ public class Computer extends Thread {
     private final Condition condition;
     private final MyGui frame;
     private int count = 0;
-    private static final MySocket socket = new MySocket();
+    private final AiSocket aiSocket;
     private static Mode mode;
 
     public Computer(MyGui frame, Lock lock, Condition condition) throws IOException {
         this.lock = lock;
         this.condition = condition;
         this.frame = frame;
+        if (mode == Mode.OUTER_AI) {
+            aiSocket = new AiSocket();
+        }
+        else {
+            aiSocket = null;
+        }
     }
 
     public void init() {
@@ -35,9 +41,6 @@ public class Computer extends Thread {
 
     public static void setMode(Mode mode) {
         Computer.mode = mode;
-        if (mode != Mode.OUTER_AI) {
-            socket.close();
-        }
     }
 
     public static Mode getMode() {
@@ -81,7 +84,8 @@ public class Computer extends Thread {
                 }
                 else if (mode == Mode.OUTER_AI) {
                     try {
-                        blackMove = socket.queryStep(getBoard().getLastMove());
+                        assert aiSocket != null;
+                        blackMove = aiSocket.queryStep(getBoard().getLastMove());
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -118,9 +122,17 @@ public class Computer extends Thread {
         }
         else if (event == PieceEvent.CHECKMATED) {
             new MyDialog("你被将死了！",frame, true);
+            if (mode == Mode.OUTER_AI) {
+                assert aiSocket != null;
+                aiSocket.close();
+            }
         }
         else if (event == PieceEvent.DRAW) {
             new MyDialog("你将对方逼和了！",frame, true);
+            if (mode == Mode.OUTER_AI) {
+                assert aiSocket != null;
+                aiSocket.close();
+            }
         }
     }
 

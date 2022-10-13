@@ -16,11 +16,12 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class MySocket {
+public class AiSocket {
     private Socket socket;
     private final PyConnect connect;
 
-    public MySocket() {
+    public AiSocket() {
+        System.out.println("AI socket 建立");
         freePort();
         PyConnect connect = new PyConnect();
         this.connect = connect;
