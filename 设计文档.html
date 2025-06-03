@@ -1,0 +1,754 @@
+<!doctype html>
+<html>
+<head>
+<meta charset='UTF-8'><meta name='viewport' content='width=device-width initial-scale=1'>
+
+<link href='https://fonts.loli.net/css?family=Open+Sans:400italic,700italic,700,400&subset=latin,latin-ext' rel='stylesheet' type='text/css' /><style type='text/css'>html {overflow-x: initial !important;}:root { --bg-color:#ffffff; --text-color:#333333; --select-text-bg-color:#B5D6FC; --select-text-font-color:auto; --monospace:"Lucida Console",Consolas,"Courier",monospace; --title-bar-height:20px; }
+.mac-os-11 { --title-bar-height:28px; }
+html { font-size: 14px; background-color: var(--bg-color); color: var(--text-color); font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+body { margin: 0px; padding: 0px; height: auto; inset: 0px; font-size: 1rem; line-height: 1.42857; overflow-x: hidden; background: inherit; tab-size: 4; }
+iframe { margin: auto; }
+a.url { word-break: break-all; }
+a:active, a:hover { outline: 0px; }
+.in-text-selection, ::selection { text-shadow: none; background: var(--select-text-bg-color); color: var(--select-text-font-color); }
+#write { margin: 0px auto; height: auto; width: inherit; word-break: normal; overflow-wrap: break-word; position: relative; white-space: normal; overflow-x: visible; padding-top: 36px; }
+#write.first-line-indent p { text-indent: 2em; }
+#write.first-line-indent li p, #write.first-line-indent p * { text-indent: 0px; }
+#write.first-line-indent li { margin-left: 2em; }
+.for-image #write { padding-left: 8px; padding-right: 8px; }
+body.typora-export { padding-left: 30px; padding-right: 30px; }
+.typora-export .footnote-line, .typora-export li, .typora-export p { white-space: pre-wrap; }
+.typora-export .task-list-item input { pointer-events: none; }
+@media screen and (max-width: 500px) {
+  body.typora-export { padding-left: 0px; padding-right: 0px; }
+  #write { padding-left: 20px; padding-right: 20px; }
+  .CodeMirror-sizer { margin-left: 0px !important; }
+  .CodeMirror-gutters { display: none !important; }
+}
+#write li > figure:last-child { margin-bottom: 0.5rem; }
+#write ol, #write ul { position: relative; }
+img { max-width: 100%; vertical-align: middle; image-orientation: from-image; }
+button, input, select, textarea { color: inherit; font: inherit; }
+input[type="checkbox"], input[type="radio"] { line-height: normal; padding: 0px; }
+*, ::after, ::before { box-sizing: border-box; }
+#write h1, #write h2, #write h3, #write h4, #write h5, #write h6, #write p, #write pre { width: inherit; }
+#write h1, #write h2, #write h3, #write h4, #write h5, #write h6, #write p { position: relative; }
+p { line-height: inherit; }
+h1, h2, h3, h4, h5, h6 { break-after: avoid-page; break-inside: avoid; orphans: 4; }
+p { orphans: 4; }
+h1 { font-size: 2rem; }
+h2 { font-size: 1.8rem; }
+h3 { font-size: 1.6rem; }
+h4 { font-size: 1.4rem; }
+h5 { font-size: 1.2rem; }
+h6 { font-size: 1rem; }
+.md-math-block, .md-rawblock, h1, h2, h3, h4, h5, h6, p { margin-top: 1rem; margin-bottom: 1rem; }
+.hidden { display: none; }
+.md-blockmeta { color: rgb(204, 204, 204); font-weight: 700; font-style: italic; }
+a { cursor: pointer; }
+sup.md-footnote { padding: 2px 4px; background-color: rgba(238, 238, 238, 0.7); color: rgb(85, 85, 85); border-radius: 4px; cursor: pointer; }
+sup.md-footnote a, sup.md-footnote a:hover { color: inherit; text-transform: inherit; text-decoration: inherit; }
+#write input[type="checkbox"] { cursor: pointer; width: inherit; height: inherit; }
+figure { overflow-x: auto; margin: 1.2em 0px; max-width: calc(100% + 16px); padding: 0px; }
+figure > table { margin: 0px; }
+tr { break-inside: avoid; break-after: auto; }
+thead { display: table-header-group; }
+table { border-collapse: collapse; border-spacing: 0px; width: 100%; overflow: auto; break-inside: auto; text-align: left; }
+table.md-table td { min-width: 32px; }
+.CodeMirror-gutters { border-right: 0px; background-color: inherit; }
+.CodeMirror-linenumber { user-select: none; }
+.CodeMirror { text-align: left; }
+.CodeMirror-placeholder { opacity: 0.3; }
+.CodeMirror pre { padding: 0px 4px; }
+.CodeMirror-lines { padding: 0px; }
+div.hr:focus { cursor: none; }
+#write pre { white-space: pre-wrap; }
+#write.fences-no-line-wrapping pre { white-space: pre; }
+#write pre.ty-contain-cm { white-space: normal; }
+.CodeMirror-gutters { margin-right: 4px; }
+.md-fences { font-size: 0.9rem; display: block; break-inside: avoid; text-align: left; overflow: visible; white-space: pre; background: inherit; position: relative !important; }
+.md-fences-adv-panel { width: 100%; margin-top: 10px; text-align: center; padding-top: 0px; padding-bottom: 8px; overflow-x: auto; }
+#write .md-fences.mock-cm { white-space: pre-wrap; }
+.md-fences.md-fences-with-lineno { padding-left: 0px; }
+#write.fences-no-line-wrapping .md-fences.mock-cm { white-space: pre; overflow-x: auto; }
+.md-fences.mock-cm.md-fences-with-lineno { padding-left: 8px; }
+.CodeMirror-line, twitterwidget { break-inside: avoid; }
+.footnotes { opacity: 0.8; font-size: 0.9rem; margin-top: 1em; margin-bottom: 1em; }
+.footnotes + .footnotes { margin-top: 0px; }
+.md-reset { margin: 0px; padding: 0px; border: 0px; outline: 0px; vertical-align: top; background: 0px 0px; text-decoration: none; text-shadow: none; float: none; position: static; width: auto; height: auto; white-space: nowrap; cursor: inherit; -webkit-tap-highlight-color: transparent; line-height: normal; font-weight: 400; text-align: left; box-sizing: content-box; direction: ltr; }
+li div { padding-top: 0px; }
+blockquote { margin: 1rem 0px; }
+li .mathjax-block, li p { margin: 0.5rem 0px; }
+li blockquote { margin: 1rem 0px; }
+li { margin: 0px; position: relative; }
+blockquote > :last-child { margin-bottom: 0px; }
+blockquote > :first-child, li > :first-child { margin-top: 0px; }
+.footnotes-area { color: rgb(136, 136, 136); margin-top: 0.714rem; padding-bottom: 0.143rem; white-space: normal; }
+#write .footnote-line { white-space: pre-wrap; }
+@media print {
+  body, html { border: 1px solid transparent; height: 99%; break-after: avoid; break-before: avoid; font-variant-ligatures: no-common-ligatures; }
+  #write { margin-top: 0px; padding-top: 0px; border-color: transparent !important; }
+  .typora-export * { -webkit-print-color-adjust: exact; }
+  .typora-export #write { break-after: avoid; }
+  .typora-export #write::after { height: 0px; }
+  .is-mac table { break-inside: avoid; }
+  .typora-export-show-outline .typora-export-sidebar { display: none; }
+}
+.footnote-line { margin-top: 0.714em; font-size: 0.7em; }
+a img, img a { cursor: pointer; }
+pre.md-meta-block { font-size: 0.8rem; min-height: 0.8rem; white-space: pre-wrap; background: rgb(204, 204, 204); display: block; overflow-x: hidden; }
+p > .md-image:only-child:not(.md-img-error) img, p > img:only-child { display: block; margin: auto; }
+#write.first-line-indent p > .md-image:only-child:not(.md-img-error) img { left: -2em; position: relative; }
+p > .md-image:only-child { display: inline-block; width: 100%; }
+#write .MathJax_Display { margin: 0.8em 0px 0px; }
+.md-math-block { width: 100%; }
+.md-math-block:not(:empty)::after { display: none; }
+.MathJax_ref { fill: currentcolor; }
+[contenteditable="true"]:active, [contenteditable="true"]:focus, [contenteditable="false"]:active, [contenteditable="false"]:focus { outline: 0px; box-shadow: none; }
+.md-task-list-item { position: relative; list-style-type: none; }
+.task-list-item.md-task-list-item { padding-left: 0px; }
+.md-task-list-item > input { position: absolute; top: 0px; left: 0px; margin-left: -1.2em; margin-top: calc(1em - 10px); border: none; }
+.math { font-size: 1rem; }
+.md-toc { min-height: 3.58rem; position: relative; font-size: 0.9rem; border-radius: 10px; }
+.md-toc-content { position: relative; margin-left: 0px; }
+.md-toc-content::after, .md-toc::after { display: none; }
+.md-toc-item { display: block; color: rgb(65, 131, 196); }
+.md-toc-item a { text-decoration: none; }
+.md-toc-inner:hover { text-decoration: underline; }
+.md-toc-inner { display: inline-block; cursor: pointer; }
+.md-toc-h1 .md-toc-inner { margin-left: 0px; font-weight: 700; }
+.md-toc-h2 .md-toc-inner { margin-left: 2em; }
+.md-toc-h3 .md-toc-inner { margin-left: 4em; }
+.md-toc-h4 .md-toc-inner { margin-left: 6em; }
+.md-toc-h5 .md-toc-inner { margin-left: 8em; }
+.md-toc-h6 .md-toc-inner { margin-left: 10em; }
+@media screen and (max-width: 48em) {
+  .md-toc-h3 .md-toc-inner { margin-left: 3.5em; }
+  .md-toc-h4 .md-toc-inner { margin-left: 5em; }
+  .md-toc-h5 .md-toc-inner { margin-left: 6.5em; }
+  .md-toc-h6 .md-toc-inner { margin-left: 8em; }
+}
+a.md-toc-inner { font-size: inherit; font-style: inherit; font-weight: inherit; line-height: inherit; }
+.footnote-line a:not(.reversefootnote) { color: inherit; }
+.md-attr { display: none; }
+.md-fn-count::after { content: "."; }
+code, pre, samp, tt { font-family: var(--monospace); }
+kbd { margin: 0px 0.1em; padding: 0.1em 0.6em; font-size: 0.8em; color: rgb(36, 39, 41); background: rgb(255, 255, 255); border: 1px solid rgb(173, 179, 185); border-radius: 3px; box-shadow: rgba(12, 13, 14, 0.2) 0px 1px 0px, rgb(255, 255, 255) 0px 0px 0px 2px inset; white-space: nowrap; vertical-align: middle; }
+.md-comment { color: rgb(162, 127, 3); opacity: 0.6; font-family: var(--monospace); }
+code { text-align: left; vertical-align: initial; }
+a.md-print-anchor { white-space: pre !important; border-width: initial !important; border-style: none !important; border-color: initial !important; display: inline-block !important; position: absolute !important; width: 1px !important; right: 0px !important; outline: 0px !important; background: 0px 0px !important; text-decoration: initial !important; text-shadow: initial !important; }
+.os-windows.monocolor-emoji .md-emoji { font-family: "Segoe UI Symbol", sans-serif; }
+.md-diagram-panel > svg { max-width: 100%; }
+[lang="flow"] svg, [lang="mermaid"] svg { max-width: 100%; height: auto; }
+[lang="mermaid"] .node text { font-size: 1rem; }
+table tr th { border-bottom: 0px; }
+video { max-width: 100%; display: block; margin: 0px auto; }
+iframe { max-width: 100%; width: 100%; border: none; }
+.highlight td, .highlight tr { border: 0px; }
+mark { background: rgb(255, 255, 0); color: rgb(0, 0, 0); }
+.md-html-inline .md-plain, .md-html-inline strong, mark .md-inline-math, mark strong { color: inherit; }
+.md-expand mark .md-meta { opacity: 0.3 !important; }
+mark .md-meta { color: rgb(0, 0, 0); }
+@media print {
+  .typora-export h1, .typora-export h2, .typora-export h3, .typora-export h4, .typora-export h5, .typora-export h6 { break-inside: avoid; }
+}
+.md-diagram-panel .messageText { stroke: none !important; }
+.md-diagram-panel .start-state { fill: var(--node-fill); }
+.md-diagram-panel .edgeLabel rect { opacity: 1 !important; }
+.md-fences.md-fences-math { font-size: 1em; }
+.md-fences-advanced:not(.md-focus) { padding: 0px; white-space: nowrap; border: 0px; }
+.md-fences-advanced:not(.md-focus) { background: inherit; }
+.typora-export-show-outline .typora-export-content { max-width: 1440px; margin: auto; display: flex; flex-direction: row; }
+.typora-export-sidebar { width: 300px; font-size: 0.8rem; margin-top: 80px; margin-right: 18px; }
+.typora-export-show-outline #write { --webkit-flex:2; flex: 2 1 0%; }
+.typora-export-sidebar .outline-content { position: fixed; top: 0px; max-height: 100%; overflow: hidden auto; padding-bottom: 30px; padding-top: 60px; width: 300px; }
+@media screen and (max-width: 1024px) {
+  .typora-export-sidebar, .typora-export-sidebar .outline-content { width: 240px; }
+}
+@media screen and (max-width: 800px) {
+  .typora-export-sidebar { display: none; }
+}
+.outline-content li, .outline-content ul { margin-left: 0px; margin-right: 0px; padding-left: 0px; padding-right: 0px; list-style: none; }
+.outline-content ul { margin-top: 0px; margin-bottom: 0px; }
+.outline-content strong { font-weight: 400; }
+.outline-expander { width: 1rem; height: 1.42857rem; position: relative; display: table-cell; vertical-align: middle; cursor: pointer; padding-left: 4px; }
+.outline-expander::before { content: ""; position: relative; font-family: Ionicons; display: inline-block; font-size: 8px; vertical-align: middle; }
+.outline-item { padding-top: 3px; padding-bottom: 3px; cursor: pointer; }
+.outline-expander:hover::before { content: ""; }
+.outline-h1 > .outline-item { padding-left: 0px; }
+.outline-h2 > .outline-item { padding-left: 1em; }
+.outline-h3 > .outline-item { padding-left: 2em; }
+.outline-h4 > .outline-item { padding-left: 3em; }
+.outline-h5 > .outline-item { padding-left: 4em; }
+.outline-h6 > .outline-item { padding-left: 5em; }
+.outline-label { cursor: pointer; display: table-cell; vertical-align: middle; text-decoration: none; color: inherit; }
+.outline-label:hover { text-decoration: underline; }
+.outline-item:hover { border-color: rgb(245, 245, 245); background-color: var(--item-hover-bg-color); }
+.outline-item:hover { margin-left: -28px; margin-right: -28px; border-left: 28px solid transparent; border-right: 28px solid transparent; }
+.outline-item-single .outline-expander::before, .outline-item-single .outline-expander:hover::before { display: none; }
+.outline-item-open > .outline-item > .outline-expander::before { content: ""; }
+.outline-children { display: none; }
+.info-panel-tab-wrapper { display: none; }
+.outline-item-open > .outline-children { display: block; }
+.typora-export .outline-item { padding-top: 1px; padding-bottom: 1px; }
+.typora-export .outline-item:hover { margin-right: -8px; border-right: 8px solid transparent; }
+.typora-export .outline-expander::before { content: "+"; font-family: inherit; top: -1px; }
+.typora-export .outline-expander:hover::before, .typora-export .outline-item-open > .outline-item > .outline-expander::before { content: "−"; }
+.typora-export-collapse-outline .outline-children { display: none; }
+.typora-export-collapse-outline .outline-item-open > .outline-children, .typora-export-no-collapse-outline .outline-children { display: block; }
+.typora-export-no-collapse-outline .outline-expander::before { content: "" !important; }
+.typora-export-show-outline .outline-item-active > .outline-item .outline-label { font-weight: 700; }
+.md-inline-math-container mjx-container { zoom: 0.95; }
+
+
+:root {
+    --side-bar-bg-color: #fafafa;
+    --control-text-color: #777;
+}
+
+@include-when-export url(https://fonts.loli.net/css?family=Open+Sans:400italic,700italic,700,400&subset=latin,latin-ext);
+
+/* open-sans-regular - latin-ext_latin */
+  /* open-sans-italic - latin-ext_latin */
+    /* open-sans-700 - latin-ext_latin */
+    /* open-sans-700italic - latin-ext_latin */
+  html {
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+}
+
+body {
+    font-family: "Open Sans","Clear Sans", "Helvetica Neue", Helvetica, Arial, 'Segoe UI Emoji', sans-serif;
+    color: rgb(51, 51, 51);
+    line-height: 1.6;
+}
+
+#write {
+    max-width: 860px;
+  	margin: 0 auto;
+  	padding: 30px;
+    padding-bottom: 100px;
+}
+
+@media only screen and (min-width: 1400px) {
+	#write {
+		max-width: 1024px;
+	}
+}
+
+@media only screen and (min-width: 1800px) {
+	#write {
+		max-width: 1200px;
+	}
+}
+
+#write > ul:first-child,
+#write > ol:first-child{
+    margin-top: 30px;
+}
+
+a {
+    color: #4183C4;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    position: relative;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    font-weight: bold;
+    line-height: 1.4;
+    cursor: text;
+}
+h1:hover a.anchor,
+h2:hover a.anchor,
+h3:hover a.anchor,
+h4:hover a.anchor,
+h5:hover a.anchor,
+h6:hover a.anchor {
+    text-decoration: none;
+}
+h1 tt,
+h1 code {
+    font-size: inherit;
+}
+h2 tt,
+h2 code {
+    font-size: inherit;
+}
+h3 tt,
+h3 code {
+    font-size: inherit;
+}
+h4 tt,
+h4 code {
+    font-size: inherit;
+}
+h5 tt,
+h5 code {
+    font-size: inherit;
+}
+h6 tt,
+h6 code {
+    font-size: inherit;
+}
+h1 {
+    font-size: 2.25em;
+    line-height: 1.2;
+    border-bottom: 1px solid #eee;
+}
+h2 {
+    font-size: 1.75em;
+    line-height: 1.225;
+    border-bottom: 1px solid #eee;
+}
+
+/*@media print {
+    .typora-export h1,
+    .typora-export h2 {
+        border-bottom: none;
+        padding-bottom: initial;
+    }
+
+    .typora-export h1::after,
+    .typora-export h2::after {
+        content: "";
+        display: block;
+        height: 100px;
+        margin-top: -96px;
+        border-top: 1px solid #eee;
+    }
+}*/
+
+h3 {
+    font-size: 1.5em;
+    line-height: 1.43;
+}
+h4 {
+    font-size: 1.25em;
+}
+h5 {
+    font-size: 1em;
+}
+h6 {
+   font-size: 1em;
+    color: #777;
+}
+p,
+blockquote,
+ul,
+ol,
+dl,
+table{
+    margin: 0.8em 0;
+}
+li>ol,
+li>ul {
+    margin: 0 0;
+}
+hr {
+    height: 2px;
+    padding: 0;
+    margin: 16px 0;
+    background-color: #e7e7e7;
+    border: 0 none;
+    overflow: hidden;
+    box-sizing: content-box;
+}
+
+li p.first {
+    display: inline-block;
+}
+ul,
+ol {
+    padding-left: 30px;
+}
+ul:first-child,
+ol:first-child {
+    margin-top: 0;
+}
+ul:last-child,
+ol:last-child {
+    margin-bottom: 0;
+}
+blockquote {
+    border-left: 4px solid #dfe2e5;
+    padding: 0 15px;
+    color: #777777;
+}
+blockquote blockquote {
+    padding-right: 0;
+}
+table {
+    padding: 0;
+    word-break: initial;
+}
+table tr {
+    border: 1px solid #dfe2e5;
+    margin: 0;
+    padding: 0;
+}
+table tr:nth-child(2n),
+thead {
+    background-color: #f8f8f8;
+}
+table th {
+    font-weight: bold;
+    border: 1px solid #dfe2e5;
+    border-bottom: 0;
+    margin: 0;
+    padding: 6px 13px;
+}
+table td {
+    border: 1px solid #dfe2e5;
+    margin: 0;
+    padding: 6px 13px;
+}
+table th:first-child,
+table td:first-child {
+    margin-top: 0;
+}
+table th:last-child,
+table td:last-child {
+    margin-bottom: 0;
+}
+
+.CodeMirror-lines {
+    padding-left: 4px;
+}
+
+.code-tooltip {
+    box-shadow: 0 1px 1px 0 rgba(0,28,36,.3);
+    border-top: 1px solid #eef2f2;
+}
+
+.md-fences,
+code,
+tt {
+    border: 1px solid #e7eaed;
+    background-color: #f8f8f8;
+    border-radius: 3px;
+    padding: 0;
+    padding: 2px 4px 0px 4px;
+    font-size: 0.9em;
+}
+
+code {
+    background-color: #f3f4f4;
+    padding: 0 2px 0 2px;
+}
+
+.md-fences {
+    margin-bottom: 15px;
+    margin-top: 15px;
+    padding-top: 8px;
+    padding-bottom: 6px;
+}
+
+
+.md-task-list-item > input {
+  margin-left: -1.3em;
+}
+
+@media print {
+    html {
+        font-size: 13px;
+    }
+    table,
+    pre {
+        page-break-inside: avoid;
+    }
+    pre {
+        word-wrap: break-word;
+    }
+}
+
+.md-fences {
+	background-color: #f8f8f8;
+}
+#write pre.md-meta-block {
+	padding: 1rem;
+    font-size: 85%;
+    line-height: 1.45;
+    background-color: #f7f7f7;
+    border: 0;
+    border-radius: 3px;
+    color: #777777;
+    margin-top: 0 !important;
+}
+
+.mathjax-block>.code-tooltip {
+	bottom: .375rem;
+}
+
+.md-mathjax-midline {
+    background: #fafafa;
+}
+
+#write>h3.md-focus:before{
+	left: -1.5625rem;
+	top: .375rem;
+}
+#write>h4.md-focus:before{
+	left: -1.5625rem;
+	top: .285714286rem;
+}
+#write>h5.md-focus:before{
+	left: -1.5625rem;
+	top: .285714286rem;
+}
+#write>h6.md-focus:before{
+	left: -1.5625rem;
+	top: .285714286rem;
+}
+.md-image>.md-meta {
+    /*border: 1px solid #ddd;*/
+    border-radius: 3px;
+    padding: 2px 0px 0px 4px;
+    font-size: 0.9em;
+    color: inherit;
+}
+
+.md-tag {
+    color: #a7a7a7;
+    opacity: 1;
+}
+
+.md-toc { 
+    margin-top:20px;
+    padding-bottom:20px;
+}
+
+.sidebar-tabs {
+    border-bottom: none;
+}
+
+#typora-quick-open {
+    border: 1px solid #ddd;
+    background-color: #f8f8f8;
+}
+
+#typora-quick-open-item {
+    background-color: #FAFAFA;
+    border-color: #FEFEFE #e5e5e5 #e5e5e5 #eee;
+    border-style: solid;
+    border-width: 1px;
+}
+
+/** focus mode */
+.on-focus-mode blockquote {
+    border-left-color: rgba(85, 85, 85, 0.12);
+}
+
+header, .context-menu, .megamenu-content, footer{
+    font-family: "Segoe UI", "Arial", sans-serif;
+}
+
+.file-node-content:hover .file-node-icon,
+.file-node-content:hover .file-node-open-state{
+    visibility: visible;
+}
+
+.mac-seamless-mode #typora-sidebar {
+    background-color: #fafafa;
+    background-color: var(--side-bar-bg-color);
+}
+
+.md-lang {
+    color: #b4654d;
+}
+
+/*.html-for-mac {
+    --item-hover-bg-color: #E6F0FE;
+}*/
+
+#md-notification .btn {
+    border: 0;
+}
+
+.dropdown-menu .divider {
+    border-color: #e5e5e5;
+    opacity: 0.4;
+}
+
+.ty-preferences .window-content {
+    background-color: #fafafa;
+}
+
+.ty-preferences .nav-group-item.active {
+    color: white;
+    background: #999;
+}
+
+.menu-item-container a.menu-style-btn {
+    background-color: #f5f8fa;
+    background-image: linear-gradient( 180deg , hsla(0, 0%, 100%, 0.8), hsla(0, 0%, 100%, 0)); 
+}
+
+
+
+mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+  min-height: 1px;
+  min-width: 1px;
+}
+
+mjx-container[jax="SVG"] > svg a {
+  fill: blue;
+  stroke: blue;
+}
+
+mjx-assistive-mml {
+  position: absolute !important;
+  top: 0px;
+  left: 0px;
+  clip: rect(1px, 1px, 1px, 1px);
+  padding: 1px 0px 0px 0px !important;
+  border: 0px !important;
+  display: block !important;
+  width: auto !important;
+  overflow: hidden !important;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+mjx-assistive-mml[display="block"] {
+  width: 100% !important;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][display="true"][width="full"] {
+  display: flex;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line], svg[data-table] > g > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame], svg[data-table] > g > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed, svg[data-table] > g > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted, svg[data-table] > g > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > g > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
+  stroke-width: 3;
+}
+
+g[data-mml-node="xypic"] path {
+  stroke-width: inherit;
+}
+
+.MathJax g[data-mml-node="xypic"] path {
+  stroke-width: inherit;
+}
+mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
+							stroke-width: 0;
+						}
+</style><title>设计文档</title>
+</head>
+<body class='typora-export os-windows'><div class='typora-export-content'>
+<div id='write'  class=''><h1 id='java大作业设计文档'><span>Java大作业设计文档</span></h1><h2 id='支持四种游戏模式的国际象棋小游戏'><span>支持四种游戏模式的国际象棋小游戏</span></h2><p>&nbsp;</p><h2 id='一作业选题'><span>一、作业选题</span></h2><p><span>本来我原计划大作业选题是使用Java作为后端语言实现一款web软件，但因为我这学期的数据库课程也有类似的大作业，选这个题目的话有偷懒之嫌，所以我思考再三决定选择一个对我来说十分陌生的领域——Java GUI编程。至于具体内容，我选择了国际象棋这门游戏，它的规则并不复杂，但也不像五子棋那样简单，对于2000行左右的中等规模程序再合适不过了。</span></p><p>&nbsp;</p><h2 id='二需求分析'><span>二、需求分析</span></h2><ol start='' ><li><p><span>为了让游戏能够进行，至少需要实现：</span></p><ul><li><span>一个可视化的棋盘界面</span></li><li><span>能通过鼠标点击正确移动棋子</span></li><li><span>代码能判断棋子移动是否合法</span></li><li><span>有将军、将死、和棋等判断逻辑</span></li></ul></li><li><p><span>为了让单独一个人也能玩，需要实现：</span></p><ul><li><span>一个具有较高水平，同时计算耗时不能太长的AI</span></li></ul></li><li><p><span>为了进一步提升使用体验，需要实现：</span></p><ul><li><span>合法棋子落点提示</span></li><li><span>不合法操作提示</span></li><li><span>AI移动路径提示</span></li><li><span>落棋即时渲染</span></li><li><span>一些棋类游戏的基本操作，如悔棋操作</span></li><li><span>开始新游戏操作</span></li><li><span>支持双人对战等不同模式</span></li></ul></li></ol><p><span>基于以上需求分析，本项目实现了一个支持四种游戏模式（内置AI对战、外部连接AI对战、本机双人对战、联机双人对战）的国际象棋小游戏，并支持行棋提示、将军提示、悔棋、新游戏等多种功能。</span></p><p>&nbsp;</p><h2 id='三总体设计'><span>三、总体设计</span></h2><h3 id='31-类图'><span>3.1 类图</span></h3><p><img src=".\img\classMap.png" referrerpolicy="no-referrer" alt="classMap"></p><h3 id='32-总体运行逻辑'><span>3.2 总体运行逻辑</span></h3><p><span>项目文件组织如下：</span></p><p><img src="img\files.png" referrerpolicy="no-referrer" alt="image-20221007000314670"></p><p><span>其中piece软件包中是项目的核心代码，它实现了对棋子行棋可能性的列举。gui软件包是和用户界面相关的代码，其中的listener子软件包实现了对各类事件的监听与处理，Computer和Player类继承了Thread类，用于处理电脑AI和玩家的行棋操作。util软件包中存放各种工具类，包括AI决策类，棋盘类，事件枚举类等。当玩家点击屏幕时，listener软件包中的监听器首先监听到事件的发生，然后根据事件类型调用棋盘类的各种接口，棋盘类进一步调用各棋子类。事件处理完毕后，如果有棋子移动，则对用户界面的棋盘进行一次渲染。connection软件包则用于提供与外部AI以及联机对战的通信支持。</span></p><h3 id='33-迭代一览'><span>3.3 迭代一览</span></h3><p><img src="img/hist.png"></p><p>&nbsp;</p><h2 id='四设计细节'><span>四、设计细节</span></h2><h3 id='41-底层逻辑设计'><span>4.1 底层逻辑设计</span></h3><h4 id='411-棋子类设计'><span>4.1.1 棋子类设计</span></h4><ul><li><span>国际象棋共有6种棋子：卒（Pawn）、车（Rook）、马（Knight）、象（Bishop）、后（Queen）、王（King）。我为这六种棋子各种建立了一个类，它们都继承了</span><code>ChessPiece</code><span>类，便于不同类型棋子的统一存放与多态调用。</span></li><li><span>这些棋子类的核心属性包括在棋盘上的位置、是黑棋还是白棋；它们的核心方法是返回当前能移动到的所有位置。为了获得这些位置，包括但不限于需要考虑棋子自身移动规律、其他棋子的阻碍、移动后是否会导致本方王被将军、是否超出棋盘限制等因素。</span></li></ul><h4 id='412-棋盘类设计'><span>4.1.2 棋盘类设计</span></h4><ul><li><span>由于游戏中只可能存在一个棋盘，所以我将棋盘类设计为单例模式，其他类通过实例获取方法来获取棋盘。</span></li><li><span>棋盘类的核心属性是一个存放所有棋子对象的列表。为了对列表进行高效的访问，我将棋子在棋盘中的x、y坐标与其在列表中的索引值一一对应，具体来说，是：</span><mjx-container class="MathJax" jax="SVG" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="26.67ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 11788.3 1000" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: -0.566ex;"><defs><path id="MJX-2-TEX-I-1D456" d="M184 600Q184 624 203 642T247 661Q265 661 277 649T290 619Q290 596 270 577T226 557Q211 557 198 567T184 600ZM21 287Q21 295 30 318T54 369T98 420T158 442Q197 442 223 419T250 357Q250 340 236 301T196 196T154 83Q149 61 149 51Q149 26 166 26Q175 26 185 29T208 43T235 78T260 137Q263 149 265 151T282 153Q302 153 302 143Q302 135 293 112T268 61T223 11T161 -11Q129 -11 102 10T74 74Q74 91 79 106T122 220Q160 321 166 341T173 380Q173 404 156 404H154Q124 404 99 371T61 287Q60 286 59 284T58 281T56 279T53 278T49 278T41 278H27Q21 284 21 287Z"></path><path id="MJX-2-TEX-I-1D45B" d="M21 287Q22 293 24 303T36 341T56 388T89 425T135 442Q171 442 195 424T225 390T231 369Q231 367 232 367L243 378Q304 442 382 442Q436 442 469 415T503 336T465 179T427 52Q427 26 444 26Q450 26 453 27Q482 32 505 65T540 145Q542 153 560 153Q580 153 580 145Q580 144 576 130Q568 101 554 73T508 17T439 -10Q392 -10 371 17T350 73Q350 92 386 193T423 345Q423 404 379 404H374Q288 404 229 303L222 291L189 157Q156 26 151 16Q138 -11 108 -11Q95 -11 87 -5T76 7T74 17Q74 30 112 180T152 343Q153 348 153 366Q153 405 129 405Q91 405 66 305Q60 285 60 284Q58 278 41 278H27Q21 284 21 287Z"></path><path id="MJX-2-TEX-I-1D451" d="M366 683Q367 683 438 688T511 694Q523 694 523 686Q523 679 450 384T375 83T374 68Q374 26 402 26Q411 27 422 35Q443 55 463 131Q469 151 473 152Q475 153 483 153H487H491Q506 153 506 145Q506 140 503 129Q490 79 473 48T445 8T417 -8Q409 -10 393 -10Q359 -10 336 5T306 36L300 51Q299 52 296 50Q294 48 292 46Q233 -10 172 -10Q117 -10 75 30T33 157Q33 205 53 255T101 341Q148 398 195 420T280 442Q336 442 364 400Q369 394 369 396Q370 400 396 505T424 616Q424 629 417 632T378 637H357Q351 643 351 645T353 664Q358 683 366 683ZM352 326Q329 405 277 405Q242 405 210 374T160 293Q131 214 119 129Q119 126 119 118T118 106Q118 61 136 44T179 26Q233 26 290 98L298 109L352 326Z"></path><path id="MJX-2-TEX-I-1D452" d="M39 168Q39 225 58 272T107 350T174 402T244 433T307 442H310Q355 442 388 420T421 355Q421 265 310 237Q261 224 176 223Q139 223 138 221Q138 219 132 186T125 128Q125 81 146 54T209 26T302 45T394 111Q403 121 406 121Q410 121 419 112T429 98T420 82T390 55T344 24T281 -1T205 -11Q126 -11 83 42T39 168ZM373 353Q367 405 305 405Q272 405 244 391T199 357T170 316T154 280T149 261Q149 260 169 260Q282 260 327 284T373 353Z"></path><path id="MJX-2-TEX-I-1D465" d="M52 289Q59 331 106 386T222 442Q257 442 286 424T329 379Q371 442 430 442Q467 442 494 420T522 361Q522 332 508 314T481 292T458 288Q439 288 427 299T415 328Q415 374 465 391Q454 404 425 404Q412 404 406 402Q368 386 350 336Q290 115 290 78Q290 50 306 38T341 26Q378 26 414 59T463 140Q466 150 469 151T485 153H489Q504 153 504 145Q504 144 502 134Q486 77 440 33T333 -11Q263 -11 227 52Q186 -10 133 -10H127Q78 -10 57 16T35 71Q35 103 54 123T99 143Q142 143 142 101Q142 81 130 66T107 46T94 41L91 40Q91 39 97 36T113 29T132 26Q168 26 194 71Q203 87 217 139T245 247T261 313Q266 340 266 352Q266 380 251 392T217 404Q177 404 142 372T93 290Q91 281 88 280T72 278H58Q52 284 52 289Z"></path><path id="MJX-2-TEX-N-3D" d="M56 347Q56 360 70 367H707Q722 359 722 347Q722 336 708 328L390 327H72Q56 332 56 347ZM56 153Q56 168 72 173H708Q722 163 722 153Q722 140 707 133H70Q56 140 56 153Z"></path><path id="MJX-2-TEX-N-38" d="M70 417T70 494T124 618T248 666Q319 666 374 624T429 515Q429 485 418 459T392 417T361 389T335 371T324 363L338 354Q352 344 366 334T382 323Q457 264 457 174Q457 95 399 37T249 -22Q159 -22 101 29T43 155Q43 263 172 335L154 348Q133 361 127 368Q70 417 70 494ZM286 386L292 390Q298 394 301 396T311 403T323 413T334 425T345 438T355 454T364 471T369 491T371 513Q371 556 342 586T275 624Q268 625 242 625Q201 625 165 599T128 534Q128 511 141 492T167 463T217 431Q224 426 228 424L286 386ZM250 21Q308 21 350 55T392 137Q392 154 387 169T375 194T353 216T330 234T301 253T274 270Q260 279 244 289T218 306L210 311Q204 311 181 294T133 239T107 157Q107 98 150 60T250 21Z"></path><path id="MJX-2-TEX-N-2217" d="M229 286Q216 420 216 436Q216 454 240 464Q241 464 245 464T251 465Q263 464 273 456T283 436Q283 419 277 356T270 286L328 328Q384 369 389 372T399 375Q412 375 423 365T435 338Q435 325 425 315Q420 312 357 282T289 250L355 219L425 184Q434 175 434 161Q434 146 425 136T401 125Q393 125 383 131T328 171L270 213Q283 79 283 63Q283 53 276 44T250 35Q231 35 224 44T216 63Q216 80 222 143T229 213L171 171Q115 130 110 127Q106 124 100 124Q87 124 76 134T64 161Q64 166 64 169T67 175T72 181T81 188T94 195T113 204T138 215T170 230T210 250L74 315Q65 324 65 338Q65 353 74 363T98 374Q106 374 116 368T171 328L229 286Z"></path><path id="MJX-2-TEX-N-28" d="M94 250Q94 319 104 381T127 488T164 576T202 643T244 695T277 729T302 750H315H319Q333 750 333 741Q333 738 316 720T275 667T226 581T184 443T167 250T184 58T225 -81T274 -167T316 -220T333 -241Q333 -250 318 -250H315H302L274 -226Q180 -141 137 -14T94 250Z"></path><path id="MJX-2-TEX-I-1D466" d="M21 287Q21 301 36 335T84 406T158 442Q199 442 224 419T250 355Q248 336 247 334Q247 331 231 288T198 191T182 105Q182 62 196 45T238 27Q261 27 281 38T312 61T339 94Q339 95 344 114T358 173T377 247Q415 397 419 404Q432 431 462 431Q475 431 483 424T494 412T496 403Q496 390 447 193T391 -23Q363 -106 294 -155T156 -205Q111 -205 77 -183T43 -117Q43 -95 50 -80T69 -58T89 -48T106 -45Q150 -45 150 -87Q150 -107 138 -122T115 -142T102 -147L99 -148Q101 -153 118 -160T152 -167H160Q177 -167 186 -165Q219 -156 247 -127T290 -65T313 -9T321 21L315 17Q309 13 296 6T270 -6Q250 -11 231 -11Q185 -11 150 11T104 82Q103 89 103 113Q103 170 138 262T173 379Q173 380 173 381Q173 390 173 393T169 400T158 404H154Q131 404 112 385T82 344T65 302T57 280Q55 278 41 278H27Q21 284 21 287Z"></path><path id="MJX-2-TEX-N-2212" d="M84 237T84 250T98 270H679Q694 262 694 250T679 230H98Q84 237 84 250Z"></path><path id="MJX-2-TEX-N-31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path><path id="MJX-2-TEX-N-29" d="M60 749L64 750Q69 750 74 750H86L114 726Q208 641 251 514T294 250Q294 182 284 119T261 12T224 -76T186 -143T145 -194T113 -227T90 -246Q87 -249 86 -250H74Q66 -250 63 -250T58 -247T55 -238Q56 -237 66 -225Q221 -64 221 250T66 725Q56 737 55 738Q55 746 60 749Z"></path><path id="MJX-2-TEX-N-2B" d="M56 237T56 250T70 270H369V420L370 570Q380 583 389 583Q402 583 409 568V270H707Q722 262 722 250T707 230H409V-68Q401 -82 391 -82H389H387Q375 -82 369 -68V230H70Q56 237 56 250Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><use data-c="1D456" xlink:href="#MJX-2-TEX-I-1D456"></use></g><g data-mml-node="mi" transform="translate(345,0)"><use data-c="1D45B" xlink:href="#MJX-2-TEX-I-1D45B"></use></g><g data-mml-node="mi" transform="translate(945,0)"><use data-c="1D451" xlink:href="#MJX-2-TEX-I-1D451"></use></g><g data-mml-node="mi" transform="translate(1465,0)"><use data-c="1D452" xlink:href="#MJX-2-TEX-I-1D452"></use></g><g data-mml-node="mi" transform="translate(1931,0)"><use data-c="1D465" xlink:href="#MJX-2-TEX-I-1D465"></use></g><g data-mml-node="mo" transform="translate(2780.8,0)"><use data-c="3D" xlink:href="#MJX-2-TEX-N-3D"></use></g><g data-mml-node="mn" transform="translate(3836.6,0)"><use data-c="38" xlink:href="#MJX-2-TEX-N-38"></use></g><g data-mml-node="mo" transform="translate(4558.8,0)"><use data-c="2217" xlink:href="#MJX-2-TEX-N-2217"></use></g><g data-mml-node="mo" transform="translate(5281,0)"><use data-c="28" xlink:href="#MJX-2-TEX-N-28"></use></g><g data-mml-node="mi" transform="translate(5670,0)"><use data-c="1D466" xlink:href="#MJX-2-TEX-I-1D466"></use></g><g data-mml-node="mo" transform="translate(6382.2,0)"><use data-c="2212" xlink:href="#MJX-2-TEX-N-2212"></use></g><g data-mml-node="mn" transform="translate(7382.4,0)"><use data-c="31" xlink:href="#MJX-2-TEX-N-31"></use></g><g data-mml-node="mo" transform="translate(7882.4,0)"><use data-c="29" xlink:href="#MJX-2-TEX-N-29"></use></g><g data-mml-node="mo" transform="translate(8493.7,0)"><use data-c="2B" xlink:href="#MJX-2-TEX-N-2B"></use></g><g data-mml-node="mi" transform="translate(9493.9,0)"><use data-c="1D465" xlink:href="#MJX-2-TEX-I-1D465"></use></g><g data-mml-node="mo" transform="translate(10288.1,0)"><use data-c="2212" xlink:href="#MJX-2-TEX-N-2212"></use></g><g data-mml-node="mn" transform="translate(11288.3,0)"><use data-c="31" xlink:href="#MJX-2-TEX-N-31"></use></g></g></g></svg><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>i</mi><mi>n</mi><mi>d</mi><mi>e</mi><mi>x</mi><mo>=</mo><mn>8</mn><mo>∗</mo><mo stretchy="false">(</mo><mi>y</mi><mo>−</mo><mn>1</mn><mo stretchy="false">)</mo><mo>+</mo><mi>x</mi><mo>−</mo><mn>1</mn></math></mjx-assistive-mml></mjx-container><script type="math/tex">index = 8 * (y - 1) + x - 1</script><span>。</span></li><li><span>棋盘类是本项目中最大的一个文件，有效代码长度近500行，主要的方法包括王相关状态判断、棋子移动、悔棋逻辑等。</span></li></ul><h4 id='413-ai设计'><span>4.1.3 AI设计</span></h4><h5 id='4131-内置ai设计'><span>4.1.3.1 内置AI设计</span></h5><ul><li><p><span>这部分是我在整个项目中花时间最多的一部分，因为它不仅逻辑比较复杂，容易出现意想不到的bug，而且需要不断调试参数以达到最优，这就意味着要不断进行游戏来测试AI性能。</span></p></li><li><p><span>经过调研与实验，我选择了最大最小策略+剪枝+基于所在棋盘位置的价值判断来编写我的AI。</span></p><ul><li><span>所谓最大最小策略，就是在局中一方能够获得的最小收益最大化的策略。具体来说，如果黑方先走一步，然后白方再走一步。由于在博弈当中，白方所做的选择必然要让黑方收益最小化，那么对于黑方来说，最大最小策略就是在所有被白方最小化的收益中寻找最大值。我所设计的AI正是基于这种策略对接下来几步行棋进行模拟，从中找到（局部）最优解。</span></li><li><span>最大最小策略的有效性是与模拟步数呈正相关的。经过试验，我发现当模拟步数为2时，AI所走的棋只是纯粹的趋利避害，没有丝毫大局思维。担当我将模拟步数增加到4时，每次模拟的时间就会长达十几二十秒。所以，我在最大最小策略的基础上引入了剪枝逻辑。具体来说，在遍历某一步黑方行棋时，记录之前已经遍历的所有行棋所取得的最大收益，在之后的模拟中，如果白方的某一步行棋使得收益小于之前所记录的最大收益，则直接跳过对这个分支的遍历，因为最优解显然不在这个分支中。引入剪枝之后，4步模拟平均时长减少到了2-3s，是一个合适的计算时间。</span></li><li><span>为了判断不同行棋的优劣，需要量化不同局面下的棋子价值。我参考了维基百科上的</span><a href='https://www.chessprogramming.org/Simplified_Evaluation_Function'><span>Simplified Evaluation Function</span></a><span>棋子价值表模型，它为每种棋子建立了一个价值表，以位置为唯一依据判断棋子价值。对于整个棋盘，将黑棋价值乘1，白棋价值乘-1，各个棋子求和得到全局的价值，作为最大最小策略所需要最大化的对象。为了使之适配我的设计，我还对其进行了一些修改，包括引入负的空棋格价值等。</span></li><li><span>经过调试，本AI已经达到了一个对于业余玩家来说中上的水平。</span></li></ul></li><li><p><span>在模拟决策的过程中需要不断移动棋子，势必会对原棋盘造成破坏。所以我让</span><code>ChessPiece</code><span>类实现了</span><code>Cloneable</code><span>接口并重写了</span><code>Clone()</code><span>方法，在每次模拟之前调用</span><code>clone()</code><span>对当前棋盘状态进行一次深拷贝，然后在模拟结束后将此份拷贝赋给棋盘。</span></p></li><li><p><span>此外，我还尝试了使用蒙特卡洛树搜索来编写AI，决策有效性不如最大最小策略，但决策多样性高于它。所以我还是保留了对应接口在策略类中。</span></p></li></ul><h5 id='4132-外部连接ai设计'><span>4.1.3.2 外部连接AI设计</span></h5><ul><li><span>本部分AI使用的是github上的开源</span><strong><span>sunfish</span></strong><span>AI引擎。该AI软件使用命令行进行人机交互，棋子操作方式为输入棋子原坐标+目的地坐标（如f6g6），此外，该AI使用python语言编写，因此，为了实现项目与AI引擎的交互，就必须解决二者之间的通信。</span></li><li><span>经过分析与调研，我采用了</span><code>Runtime.getRuntime().exec()</code><span>启动AI主程序+TCP socket通信的方法实现对AI的调用。</span></li><li><span>为了实现TCP socket通信，我改写了AI引擎的主程序，在其</span><code>main</code><span>方法中建立一个TCP监听器作为服务端，从监听器中获得行棋选择（统一为类似f6g6的格式），然后将其作为参数换掉原本从命令行中获得的参数。分析获得AI行棋之后，再将这个结果发送给客户端（也就是Java程序）。相对应的，Java端建立一个socket对象作为客户端，然后通过它获得TCP输入流</span><code>InputStream</code><span>和TCP输出流</span><code>OutputStream</code><span>，当玩家进行一次行棋之后，将这次行棋转化为统一的格式，然后使用</span><code>out.write</code><span>输出字节码，接着调用</span><code>in.read</code><span>，线程进入阻塞状态等待python服务端传回信息。最后将统一编码转换回原格式即可。</span></li><li><span>为了让玩家能选择哪种AI进行游戏，在窗口创建之初生成一个</span><code>Jdialog</code><span>，让玩家执行选择AI引擎。如果玩家选择了内置AI，就调用相关函数关闭客户端和服务端的socket，防止资源被浪费。</span></li><li><span>在测试中我还发现，如果在游戏开始时的模式选择界面直接点叉的话，虽然表面上看起来游戏被关闭了，但实际上游戏进程还在后台运行，所以游戏使用的TCP端口就会一直被占用。为了解决这个问题，我在创建socket之前首先通过</span><code>Runtime.getRuntime().exec()</code><span>运行</span><code>netstat -ano</code><span>指令找到占用端口的进程pid，然后通过</span><code>taskkill /t /f /im pid</code><span>杀死对应进程，释放端口。</span></li></ul><h4 id='414-ai玩家双线程设计'><span>4.1.4 AI、玩家双线程设计</span></h4><ul><li><span>AI与玩家线程在游戏开始之初就被创建，当没有行棋需要进行时，它们都处于阻塞状态。当监听器获得玩家行棋信号时，先唤醒玩家线程进行行棋，然后唤醒AI线程决策后行棋。整个过程的并发控制在</span><code>ReentrantLock</code><span>+</span><code>Condition</code><span>的配合下完成。</span></li><li><span>其实在初期规划时我并没有想到需要这个设计。但当我完成AI编写实际测试时，我发现在我点击棋子完成行棋之后，GUI界面会一直卡着不变，直到AI完成决策之后才同时刷新我的行棋和AI的行棋。经过查询资料，我知道了，当一个监听器线程被唤醒之后，主线程会阻塞直到监听器线程完成操作进入wait状态。而界面的刷新正是由主线程完成的。所以，当监听器线程进行AI决策时，主线程就一直处于阻塞状态，无法进行渲染，严重影响游戏体验，正因为如此我才选择引入这个设计。出人意料的是，在这样修改之后，AI决策的速度似乎也快了一些。</span></li></ul><h4 id='415-悔棋设计'><span>4.1.5 悔棋设计</span></h4><ul><li><span>悔棋的设计比较简单，在棋盘类中设置一个</span><code>history</code><span>列表，每次黑棋移动后将此时的棋盘状态深拷贝一份加入</span><code>history</code><span>中。在每次悔棋时，从列表尾部取出一份快照赋给棋盘的棋子列表即可。不过其中还是有很多细节需要注意。</span></li></ul><h4 id='416-本机双人对战设计'><span>4.1.6 本机双人对战设计</span></h4><ul><li><p><span>本部分设计实现的基本思路是创建两个不同的</span><code>JFrame</code><span>窗口，两个窗口共用一个</span><code>Board</code><span>棋盘类，每个玩家操作一个窗口，并使用线程锁来防止线程冲突与一个玩家连续多次行棋。</span></p></li><li><p><span>本部分的麻烦之处在于黑方也会成为玩家，所以在AI对战中对白方玩家的提示同样应该应用于这个模式下的黑方玩家。但因为我之前在设计上考虑的不是很周到，有些地方的提示添加不是只是通过改变颜色就能完成。因此，为了使得原本的函数适配双人对战模式，我花了不少时间进行重构与调试。</span></p></li><li><p><span>基本运行逻辑如下：游戏开始时创建两个窗口，一个是白棋视角，另一个是黑棋视角。白方行棋后，操作</span><code>Board</code><span>使得内部棋子排列顺序改变，然后对两个窗口进行渲染，使得棋子的改变体现在GUI界面上。特别地，同AI对战一样，对方的行棋也会以蓝色边框的方式体现在己方的窗口上。紧接着改变</span><code>Board</code><span>内部的状态变量，将此时的状态标记为黑方行棋，于是黑方就可以进行操作，而白方进行的任何操作都会被忽略。如此循环。</span></p></li><li><p><span>为了提升游戏体验，我在菜单栏加入了一个当前行棋方标识，如图所示：</span></p><p><img src="img/menu.png"></p></li></ul><h4 id='417-联机双人对战设计'><span>4.1.7 联机双人对战设计</span></h4><ul><li><p><span>本部分仍然使用TCP socket通信进行不同进程之间的数据交换。为了达到联机对战的目的，两个游戏进程应有一个服务端，有一个客户端。在进入游戏时，玩家可选择创建房间（即成为服务端）或加入房间（即成为客户端），先进入的一方自动执白棋。同时玩家可自定义连接端口，以提供多开的可能性，如图所示：</span></p><p><img src="img/server.png"></p></li><li><p><span>为了利用先前已有的AI对战结构，我将socket的收发放在了</span><code>Computer</code><span>线程中，当一方通过</span><code>OutputStream</code><span>发送出行棋路线后，立即让它调用</span><code>InputStream.read()</code><span>等待对方的回复。</span></p></li><li><p><span>服务端窗口初始化之后，程序会调用</span><code>ServerSocket.accept()</code><span>然后阻塞，直至另一个用户端成功连接，这时服务端窗口会出现成功连接的提示信息。</span></p></li></ul><h3 id='42-可视化操作界面设计'><span>4.2 可视化操作界面设计</span></h3><h4 id='421-概述'><span>4.2.1 概述</span></h4><p><span>本项目使用Java awt抽象窗口工具包 + Swing GUI工具包编写可视化界面。界面主体是一个</span><code>JFrame</code><span>对象，内部含有一个</span><code>JPanel</code><span>和两个</span><code>JButton</code><span>（分别是悔棋按键和新游戏按键）。</span><code>JPanel</code><span>表现为一个棋盘，其中又有8*8个设计为棋格外观的</span><code>JButton</code><span>，每个</span><code>JButton</code><span>通过改变背景色来实现黑白棋格的展现，通过改变文字内容来实现棋子的展现，通过改变边框内容实现提示信息的展现。对于某些信息，如非法的行棋操作，软件会生成一个定时关闭的</span><code>JDialog</code><span>进行提示。</span></p><h4 id='422-展示'><span>4.2.2 展示</span></h4><h5 id='4221-对战展示点击播放视频）'><span>4.2.2.1 对战展示（点击播放视频）</span></h5><ul><li><p><span>内置AI对战</span></p><iframe height="360" width="150" src="img/1.mp4"></body></iframe></li><li><p><span>外部AI对战</span></p><iframe height="360" width="150" src="img/2.mp4"></body></iframe></li><li><p><span>本机双人对战</span></p><iframe height="360" width="150" src="img/3.mp4"></body></iframe></li><li><p><span>联机双人对战（单机演示）</span></p><iframe height="360" width="150" src="img/4.mp4"></body></iframe></li></ul><h5 id='4222-提示展示'><span>4.2.2.2 提示展示</span></h5><ul><li><span>合法行棋路径提示：</span>
+<img src="img/1.png" style="zoom: 25%;" /></li><li><span>AI行棋路径展示：</span>
+<img src="img/2.png" style="zoom: 25%;" /></li><li><span>将军提示：</span>
+<img src="img/3.png" style="zoom: 25%;" /></li><li><span>悔棋路径提示：</span>
+<img src="img/4.png" style="zoom: 25%;" /></li><li><span>棋子无法移动提示：</span>
+<img src="img/5.png" style="zoom: 25%;" /></li><li><span>棋子不存在提示：</span>
+<img src="img/6.png" style="zoom: 25%;" /></li><li><span>非法行为提示：</span>
+<img src="img/7.png" style="zoom: 25%;" /></li><li><span>将死提示：</span>
+<img src="img/8.png" style="zoom: 25%;" /></li></ul></div></div>
+</body>
+</html>

@@ -47,7 +47,7 @@ public class MyGui extends JFrame {
             this.setBounds(200, 50, 600, 600);
         }
         setResizable(true);
-        setTitle("国际象棋 by aokmy");
+        setTitle("国际象棋 by 20231026@buaa.edu.cn");
 
         JMenuBar bar = new JMenuBar();
         bar.setLayout(new GridLayout(1, 7, 1, 1));
